@@ -1,0 +1,122 @@
+<section class="gallery-header">
+  <div class="container">
+    <div class="section-header">
+      <h1>Galerie</h1>
+      <div class="divider"></div>
+      <p class="section-subtitle">Photos, vidéos et enregistrements du Collectif Ladyland</p>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-content">
+  <div class="container">
+    <div class="gallery-filters">
+      <button
+        class="filter-btn"
+        [class.active]="isActiveFilter('all')"
+        (click)="setFilter('all')"
+      >
+        Tous
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="isActiveFilter(MediaType.PHOTO)"
+        (click)="setFilter(MediaType.PHOTO)"
+      >
+        Photos
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="isActiveFilter(MediaType.VIDEO)"
+        (click)="setFilter(MediaType.VIDEO)"
+      >
+        Vidéos
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="isActiveFilter(MediaType.AUDIO)"
+        (click)="setFilter(MediaType.AUDIO)"
+      >
+        Audio
+      </button>
+    </div>
+
+    @if (filteredMedia$ | async; as mediaItems) {
+      @if (mediaItems.length > 0) {
+        <div class="gallery-grid">
+          @for (media of mediaItems; track media.id) {
+            <div
+              class="gallery-item"
+              [class.active]="isActiveMedia(media.id)"
+              [attr.data-type]="media.type"
+              (click)="toggleMediaDetails(media.id)"
+            >
+              <div class="gallery-thumbnail">
+                <img [src]="media.thumbnailUrl || '/assets/images/gallery/default-thumb.jpg'" [alt]="media.title" class="img-responsive">
+                <div class="media-overlay">
+                  <span class="media-type-badge">{{ getMediaTypeLabel(media.type) }}</span>
+                  <div class="media-info">
+                    <h3 class="media-title">{{ media.title }}</h3>
+                    <p class="media-date">{{ media.uploadDate | date:'dd MMM yyyy' }}</p>
+                  </div>
+                </div>
+              </div>
+
+              @if (isActiveMedia(media.id)) {
+                <div class="media-details">
+                  <div class="media-details-inner">
+                    <div class="media-close" (click)="toggleMediaDetails(media.id); $event.stopPropagation()">
+                      <span>×</span>
+                    </div>
+
+                    <div class="media-content">
+                      @if (media.type === MediaType.PHOTO) {
+                        <div class="media-photo">
+                          <img [src]="media.url" [alt]="media.title" class="img-responsive">
+                        </div>
+                      } @else if (media.type === MediaType.VIDEO && isSafeUrl(media.url)) {
+                        <div class="media-video">
+                          <iframe
+                            [src]="media.url"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            class="video-frame"
+                          ></iframe>
+                        </div>
+                      } @else if (media.type === MediaType.AUDIO && isSafeUrl(media.url)) {
+                        <div class="media-audio">
+                          <iframe
+                            [src]="media.url"
+                            frameborder="0"
+                            allow="autoplay"
+                            class="audio-frame"
+                          ></iframe>
+                        </div>
+                      }
+                    </div>
+
+                    <div class="media-info-full">
+                      <h2 class="media-title-full">{{ media.title }}</h2>
+                      <p class="media-description">{{ media.description }}</p>
+                      <p class="media-meta">Ajouté le {{ media.uploadDate | date:'longDate' }}</p>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="no-media">
+          <p>Aucun contenu ne correspond à votre sélection.</p>
+        </div>
+      }
+    } @else {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Chargement de la galerie...</p>
+      </div>
+    }
+  </div>
+</section>

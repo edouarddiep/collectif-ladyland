@@ -1,0 +1,388 @@
+@use 'sass:color';
+
+// Variables
+$primary-color: #e09100;
+$secondary-color: #121212;
+$accent-color: #f8f8f8;
+$text-color: #333333;
+$light-text: #ffffff;
+
+// About Header
+.about-header {
+  padding: 6rem 0 3rem;
+  background-color: $secondary-color;
+  color: $light-text;
+
+  .section-header {
+    text-align: center;
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background-color: $primary-color;
+      margin: 0 auto;
+    }
+  }
+}
+
+// About Story Section
+.about-story {
+  padding: 5rem 0;
+  background-color: $light-text;
+
+  .about-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+
+    .about-text {
+      flex: 1 1 500px;
+
+      h2 {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        color: $secondary-color;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 40px;
+          height: 3px;
+          background-color: $primary-color;
+        }
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: $text-color;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .about-image {
+      flex: 1 1 400px;
+
+      img {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+// About Philosophy Section
+.about-philosophy {
+  padding: 5rem 0;
+  background-color: $accent-color;
+
+  .philosophy-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+
+    .philosophy-text {
+      flex: 1 1 500px;
+      order: 2;
+
+      h2 {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        color: $secondary-color;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 40px;
+          height: 3px;
+          background-color: $primary-color;
+        }
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: $text-color;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .philosophy-image {
+      flex: 1 1 400px;
+      order: 1;
+
+      img {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+// Artists Section
+.about-artists {
+  padding: 5rem 0;
+  background-color: $light-text;
+
+  .artists-title {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: $secondary-color;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 3px;
+      background-color: $primary-color;
+    }
+  }
+
+  .artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .artist-card {
+    background: $light-text;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-10px);
+    }
+
+    .artist-photo {
+      height: 350px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .artist-info {
+      padding: 1.5rem;
+    }
+
+    .artist-name {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: $secondary-color;
+    }
+
+    .artist-role {
+      font-size: 1rem;
+      color: $primary-color;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .artist-bio {
+      margin-bottom: 1.5rem;
+
+      p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: $text-color;
+      }
+    }
+
+    .artist-social {
+      display: flex;
+      gap: 1rem;
+
+      .social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: $accent-color;
+        color: $secondary-color;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: $primary-color;
+          color: $light-text;
+        }
+      }
+    }
+  }
+}
+
+// About CTA Section
+.about-cta {
+  padding: 5rem 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('/assets/images/about/cta-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: $light-text;
+  text-align: center;
+
+  .cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      border-radius: 30px;
+      background-color: $primary-color;
+      color: $light-text;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: color.adjust($primary-color, $lightness: -10%);
+      }
+    }
+  }
+}
+
+// Common Styles
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: $primary-color;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $text-color;
+    font-size: 1rem;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 992px) {
+  .philosophy-content .philosophy-text {
+    order: 1;
+  }
+
+  .philosophy-content .philosophy-image {
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-header {
+    padding: 4rem 0 2rem;
+
+    .section-header h1 {
+      font-size: 2.5rem;
+    }
+  }
+
+  .about-story, .about-philosophy, .about-artists {
+    padding: 3rem 0;
+  }
+
+  .about-content .about-text h2,
+  .philosophy-content .philosophy-text h2,
+  .artists-title {
+    font-size: 2rem;
+  }
+
+  .about-cta {
+    padding: 3rem 0;
+
+    .cta-content h2 {
+      font-size: 2rem;
+    }
+
+    .cta-content p {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .about-header .section-header h1 {
+    font-size: 2rem;
+  }
+
+  .artist-card .artist-photo {
+    height: 280px;
+  }
+}

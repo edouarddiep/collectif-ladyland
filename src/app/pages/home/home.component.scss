@@ -1,0 +1,403 @@
+@use 'sass:color';
+// Variables
+$primary-color: #e09100;
+$secondary-color: #121212;
+$accent-color: #f8f8f8;
+$text-color: #333333;
+$light-text: #ffffff;
+
+// Hero Section
+.hero {
+  height: 80vh;
+  min-height: 600px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/assets/images/home/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $light-text;
+  text-align: center;
+
+  .hero-content {
+    max-width: 800px;
+    padding: 0 20px;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+
+    .btn {
+      padding: 12px 30px;
+    }
+  }
+}
+
+// Welcome Section
+.welcome {
+  padding: 6rem 0;
+  background-color: $light-text;
+
+  .welcome-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+
+    .welcome-text {
+      flex: 1 1 400px;
+
+      p {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+    }
+
+    .welcome-image {
+      flex: 1 1 400px;
+
+      img {
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+// Upcoming Concerts Section
+.upcoming-concerts {
+  padding: 6rem 0;
+  background-color: $accent-color;
+
+  .concerts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .concert-card {
+    background: $light-text;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .concert-image {
+      height: 200px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .concert-date {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: $primary-color;
+      color: $light-text;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin: 1rem;
+      border-radius: 4px;
+    }
+
+    .concert-title {
+      padding: 0 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .concert-venue {
+      padding: 0 1rem;
+      margin-bottom: 1.5rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      margin: 0 1rem 1rem;
+    }
+  }
+}
+
+// Featured Media Section
+.featured-media {
+  padding: 6rem 0;
+  background-color: $light-text;
+
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .media-card {
+    background: $light-text;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .media-thumbnail {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .media-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        padding: 1rem;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0));
+
+        .media-type-badge {
+          background: $primary-color;
+          color: $light-text;
+          padding: 4px 10px;
+          border-radius: 4px;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .media-title {
+      padding: 1rem 1rem 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .media-description {
+      padding: 0 1rem 1rem;
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+  }
+}
+
+// CTA Section
+.cta {
+  padding: 5rem 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('/assets/images/home/cta-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: $light-text;
+  text-align: center;
+
+  .cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+  }
+}
+
+// Common Styles
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: $text-color;
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background-color: $primary-color;
+    margin: 0 auto;
+  }
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+
+  &.btn-primary {
+    background-color: $primary-color;
+    color: $light-text;
+
+    &:hover {
+      background-color: color.adjust($primary-color, $lightness: -10%);
+    }
+  }
+
+  &.btn-secondary {
+    background-color: transparent;
+    color: $light-text;
+    border: 2px solid $light-text;
+
+    &:hover {
+      background-color: $light-text;
+      color: $secondary-color;
+    }
+  }
+
+  &.btn-outline {
+    background-color: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+
+    &:hover {
+      background-color: $primary-color;
+      color: $light-text;
+    }
+  }
+
+  &.btn-sm {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-4 {
+  margin-top: 2rem;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: $primary-color;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .hero {
+    min-height: 500px;
+
+    .hero-title {
+      font-size: 3rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .welcome, .upcoming-concerts, .featured-media {
+    padding: 4rem 0;
+  }
+
+  .cta {
+    padding: 3rem 0;
+
+    .cta-content h2 {
+      font-size: 2rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .hero .hero-title {
+    font-size: 2.5rem;
+  }
+}

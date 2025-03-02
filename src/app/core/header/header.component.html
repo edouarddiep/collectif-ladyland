@@ -1,0 +1,29 @@
+<header class="header">
+  <div class="logo-container">
+    <a routerLink="/" class="logo">Collectif Ladyland</a>
+  </div>
+
+  <nav class="main-nav">
+    <ul class="nav-list">
+      @for (item of navItems; track item.path) {
+        <li class="nav-item">
+          <a
+            [routerLink]="[item.path]"
+            [routerLinkActiveOptions]="{exact: item.exact}"
+            routerLinkActive="active"
+            class="nav-link"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <button class="mobile-toggle">
+    <span class="sr-only">Menu</span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+</header>

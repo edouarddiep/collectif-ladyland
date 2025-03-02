@@ -1,0 +1,115 @@
+<section class="about-header">
+  <div class="container">
+    <div class="section-header">
+      <h1>À propos de nous</h1>
+      <div class="divider"></div>
+    </div>
+  </div>
+</section>
+
+<section class="about-story">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <h2>Notre histoire</h2>
+        <p>Le Collectif Ladyland est né en 2019 de la rencontre de quatre musiciens partageant une vision commune : créer une musique authentique qui transcende les frontières des genres établis. Ce qui a commencé comme des sessions d'improvisation dans un petit studio parisien est rapidement devenu un projet artistique à part entière.</p>
+
+        <p>Notre nom s'inspire du célèbre album de Jimi Hendrix "Electric Ladyland", tout en y ajoutant la notion de collectif qui reflète notre approche collaborative de la création musicale. Chaque membre apporte ses influences et son univers personnel, créant ainsi une identité sonore riche et diversifiée.</p>
+
+        <p>Au fil des années, nous avons développé un répertoire original qui puise dans le jazz, la soul, les musiques électroniques et world. Notre ADN musical se caractérise par des mélodies captivantes, des harmonies sophistiquées et des grooves puissants qui invitent à la danse autant qu'à l'écoute attentive.</p>
+      </div>
+
+      <div class="about-image">
+        <img src="/assets/images/about/collectif-story.jpg" alt="Collectif Ladyland en studio" class="img-responsive">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-philosophy">
+  <div class="container">
+    <div class="philosophy-content">
+      <div class="philosophy-image">
+        <img src="/assets/images/about/collectif-philosophy.jpg" alt="Collectif Ladyland en concert" class="img-responsive">
+      </div>
+
+      <div class="philosophy-text">
+        <h2>Notre philosophie</h2>
+        <p>Au cœur de notre démarche artistique se trouve la conviction que la musique doit rester un art vivant, en perpétuelle évolution. Nous privilégions une approche où la composition et l'improvisation dialoguent constamment, permettant à chaque performance d'être unique.</p>
+
+        <p>Notre musique cherche à créer des ponts entre tradition et modernité, acoustique et électronique, écrit et spontané. Cette tension créative est ce qui nous pousse à explorer sans cesse de nouveaux territoires sonores.</p>
+
+        <p>Le collectif s'inscrit également dans une démarche de partage et de transmission. Nous animons régulièrement des ateliers et des masterclasses, convaincus que la musique est avant tout un langage à partager.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-artists">
+  <div class="container">
+    <h2 class="artists-title">Les membres du collectif</h2>
+
+    @if (artists$ | async; as artists) {
+      <div class="artists-grid">
+        @for (artist of artists; track artist.id) {
+          <div class="artist-card" [id]="'artist-' + artist.id">
+            <div class="artist-photo">
+              <img [src]="artist.photoUrl" [alt]="artist.name" class="img-responsive">
+            </div>
+
+            <div class="artist-info">
+              <h3 class="artist-name">{{ artist.name }}</h3>
+              <p class="artist-role">{{ artist.role }}</p>
+              <div class="artist-bio">
+                <p>{{ artist.bio }}</p>
+              </div>
+
+              @if (artist.socialLinks) {
+                <div class="artist-social">
+                  @if (artist.socialLinks.instagram) {
+                    <a [href]="artist.socialLinks.instagram" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+                      <i class="fab fa-instagram"></i>
+                    </a>
+                  }
+
+                  @if (artist.socialLinks.facebook) {
+                    <a [href]="artist.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook">
+                      <i class="fab fa-facebook-f"></i>
+                    </a>
+                  }
+
+                  @if (artist.socialLinks.twitter) {
+                    <a [href]="artist.socialLinks.twitter" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter">
+                      <i class="fab fa-twitter"></i>
+                    </a>
+                  }
+
+                  @if (artist.socialLinks.soundcloud) {
+                    <a [href]="artist.socialLinks.soundcloud" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="SoundCloud">
+                      <i class="fab fa-soundcloud"></i>
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Chargement des profils d'artistes...</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="about-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Découvrez notre musique en live</h2>
+      <p>Rien ne vaut l'expérience d'un concert du Collectif Ladyland. Consultez notre calendrier et rejoignez-nous lors de notre prochaine performance.</p>
+      <a routerLink="/concerts" class="btn btn-primary">Voir les dates</a>
+    </div>
+  </div>
+</section>

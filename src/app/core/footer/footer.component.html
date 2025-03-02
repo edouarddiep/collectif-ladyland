@@ -1,0 +1,34 @@
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3 class="footer-title">Collectif Ladyland</h3>
+      <p>Groupe musical basé à Paris</p>
+    </div>
+
+    <div class="footer-section">
+      <h3 class="footer-title">Liens rapides</h3>
+      <ul class="footer-links">
+        <li><a routerLink="/">Accueil</a></li>
+        <li><a routerLink="/about">À propos de nous</a></li>
+        <li><a routerLink="/concerts">Concerts</a></li>
+        <li><a routerLink="/gallery">Galerie</a></li>
+        <li><a routerLink="/contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h3 class="footer-title">Suivez-nous</h3>
+      <div class="social-links">
+        @for (link of socialLinks; track link.name) {
+          <a [href]="link.url" target="_blank" rel="noopener noreferrer" class="social-link" [attr.aria-label]="link.name">
+            <i [class]="link.icon"></i>
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ currentYear }} Collectif Ladyland. Tous droits réservés.</p>
+  </div>
+</footer>

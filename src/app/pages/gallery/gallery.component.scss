@@ -1,0 +1,373 @@
+// Variables
+$primary-color: #e09100;
+$secondary-color: #121212;
+$accent-color: #f8f8f8;
+$text-color: #333333;
+$light-text: #ffffff;
+
+// Gallery Header
+.gallery-header {
+  padding: 6rem 0 3rem;
+  background-color: $secondary-color;
+  color: $light-text;
+
+  .section-header {
+    text-align: center;
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background-color: $primary-color;
+      margin: 0 auto 1.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.3rem;
+      font-weight: 300;
+    }
+  }
+}
+
+// Gallery Content
+.gallery-content {
+  padding: 5rem 0;
+  background-color: $light-text;
+}
+
+// Filters
+.gallery-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+
+  .filter-btn {
+    background: none;
+    border: none;
+    padding: 8px 20px;
+    margin: 0 10px 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-color;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $primary-color;
+      transition: width 0.3s ease;
+    }
+
+    &:hover {
+      color: $primary-color;
+
+      &::after {
+        width: 100%;
+      }
+    }
+
+    &.active {
+      color: $primary-color;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Gallery Grid
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+
+  &:hover .media-overlay {
+    opacity: 1;
+  }
+
+  &.active {
+    z-index: 10;
+  }
+}
+
+.gallery-thumbnail {
+  height: 250px;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.media-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3), transparent);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  .media-type-badge {
+    align-self: flex-end;
+    background-color: $primary-color;
+    color: $light-text;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .media-info {
+    color: $light-text;
+
+    .media-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .media-date {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  }
+}
+
+// Media Details
+.media-details {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .media-details-inner {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: $light-text;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .media-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: $light-text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  .media-content {
+    width: 100%;
+
+    .media-photo {
+      width: 100%;
+      max-height: 70vh;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+    }
+
+    .media-video, .media-audio {
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; // 16:9 aspect ratio
+      position: relative;
+
+      iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .media-audio {
+      padding-bottom: 30%; // Shorter for audio players
+    }
+  }
+
+  .media-info-full {
+    padding: 2rem;
+
+    .media-title-full {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: $secondary-color;
+    }
+
+    .media-description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: $text-color;
+      margin-bottom: 1.5rem;
+    }
+
+    .media-meta {
+      font-size: 0.9rem;
+      color: #777;
+    }
+  }
+}
+
+// No Media & Loading
+.no-media {
+  text-align: center;
+  padding: 3rem 0;
+
+  p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: $primary-color;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+// Common Styles
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .gallery-header {
+    padding: 4rem 0 2rem;
+
+    .section-header h1 {
+      font-size: 2.5rem;
+    }
+
+    .section-header .section-subtitle {
+      font-size: 1.1rem;
+    }
+  }
+
+  .gallery-content {
+    padding: 3rem 0;
+  }
+
+  .media-details .media-info-full {
+    padding: 1.5rem;
+
+    .media-title-full {
+      font-size: 1.5rem;
+    }
+
+    .media-description {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-header .section-header h1 {
+    font-size: 2rem;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-filters .filter-btn {
+    margin: 0 5px 10px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}

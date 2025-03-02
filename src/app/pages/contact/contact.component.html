@@ -1,0 +1,196 @@
+<section class="contact-header">
+  <div class="container">
+    <div class="section-header">
+      <h1>Contact</h1>
+      <div class="divider"></div>
+      <p class="section-subtitle">Nous sommes à votre écoute</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact-content">
+  <div class="container">
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <h2>Restons en contact</h2>
+        <p class="info-text">Vous souhaitez nous contacter pour une réservation, une collaboration, une interview ou simplement pour nous faire part de vos impressions ? Utilisez le formulaire ci-contre ou retrouvez-nous sur nos réseaux sociaux.</p>
+
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text">
+              <h3>Email</h3>
+              <p>contact&#64;collectifladyland.com</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-text">
+              <h3>Téléphone</h3>
+              <p>+33 (0)6 xx xx xx xx</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-text">
+              <h3>Adresse</h3>
+              <p>Paris, France</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-links">
+          <a href="https://facebook.com/collectifladyland" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://instagram.com/collectifladyland" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://youtube.com/collectifladyland" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
+            <i class="fab fa-youtube"></i>
+          </a>
+          <a href="https://open.spotify.com/artist/collectifladyland" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Spotify">
+            <i class="fab fa-spotify"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form-container">
+        @if ((submitted$ | async) !== true) {
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+            <h2>Envoyez-nous un message</h2>
+
+            @if (formError$ | async; as errorMessage) {
+              <div class="form-error">
+                <p>{{ errorMessage }}</p>
+              </div>
+            }
+
+            <div class="form-group">
+              <label for="name">Nom <span class="required">*</span></label>
+              <input
+                type="text"
+                id="name"
+                formControlName="name"
+                [class.invalid]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched"
+              >
+              @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+                <div class="error-message">
+                  @if (contactForm.get('name')?.errors?.['required']) {
+                    <p>Le nom est requis.</p>
+                  } @else if (contactForm.get('name')?.errors?.['minlength']) {
+                    <p>Le nom doit contenir au moins 2 caractères.</p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email <span class="required">*</span></label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                [class.invalid]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
+              >
+              @if (contactForm.get('email')?.invalid && contactForm.get('email')?.touched) {
+                <div class="error-message">
+                  @if (contactForm.get('email')?.errors?.['required']) {
+                    <p>L'email est requis.</p>
+                  } @else if (contactForm.get('email')?.errors?.['email']) {
+                    <p>Veuillez entrer une adresse email valide.</p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Sujet <span class="required">*</span></label>
+              <input
+                type="text"
+                id="subject"
+                formControlName="subject"
+                [class.invalid]="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched"
+              >
+              @if (contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched) {
+                <div class="error-message">
+                  <p>Le sujet est requis.</p>
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message <span class="required">*</span></label>
+              <textarea
+                id="message"
+                formControlName="message"
+                rows="6"
+                [class.invalid]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
+              ></textarea>
+              @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+                <div class="error-message">
+                  @if (contactForm.get('message')?.errors?.['required']) {
+                    <p>Le message est requis.</p>
+                  } @else if (contactForm.get('message')?.errors?.['minlength']) {
+                    <p>Le message doit contenir au moins 10 caractères.</p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-submit">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="submitting$ | async"
+              >
+                @if (submitting$ | async) {
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Envoi en cours...
+                } @else {
+                  Envoyer le message
+                }
+              </button>
+            </div>
+          </form>
+        } @else {
+          <div class="form-success">
+            @if (formSuccess$ | async; as successMessage) {
+              <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <h2>Message envoyé !</h2>
+              <p>{{ successMessage }}</p>
+              <button
+                class="btn btn-outline"
+                (click)="resetForm()"
+              >
+                Envoyer un autre message
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-map">
+  <div class="container">
+    <h2 class="map-title">Où nous trouver</h2>
+    <div class="map-wrapper">
+      <div class="map-placeholder">
+        <p>Carte de localisation</p>
+        <p class="map-note">Nous sommes basés à Paris et nous produisons régulièrement dans différentes salles de la capitale.</p>
+      </div>
+    </div>
+  </div>
+</section>

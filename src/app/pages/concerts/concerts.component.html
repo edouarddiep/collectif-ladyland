@@ -1,0 +1,121 @@
+<section class="concerts-header">
+  <div class="container">
+    <div class="section-header">
+      <h1>Concerts</h1>
+      <div class="divider"></div>
+      <p class="section-subtitle">Retrouvez le Collectif Ladyland sur scène</p>
+    </div>
+  </div>
+</section>
+
+<section class="upcoming-concerts">
+  <div class="container">
+    <h2 class="section-title">Concerts à venir</h2>
+
+    @if (upcomingConcerts$ | async; as upcomingConcerts) {
+      @if (upcomingConcerts.length > 0) {
+        <div class="concerts-accordion">
+          @for (concert of upcomingConcerts; track concert.id) {
+            <div class="concert-item" [class.active]="isActive(concert.id)">
+              <div class="concert-header" (click)="toggleConcertDetails(concert.id)">
+                <div class="concert-meta">
+                  <div class="concert-date">
+                    <span class="day">{{ concert.date | date:'dd' }}</span>
+                    <span class="month">{{ concert.date | date:'MMM' }}</span>
+                    <span class="year">{{ concert.date | date:'yyyy' }}</span>
+                  </div>
+
+                  <div class="concert-info">
+                    <h3 class="concert-title">{{ concert.title }}</h3>
+                    <p class="concert-location">{{ concert.venue }} - {{ concert.city }}</p>
+                  </div>
+                </div>
+
+                <div class="concert-toggle">
+                  <span class="toggle-icon"></span>
+                </div>
+              </div>
+
+              <div class="concert-details">
+                <div class="concert-details-inner">
+                  @if (concert.imageUrl) {
+                    <div class="concert-image">
+                      <img [src]="concert.imageUrl" [alt]="concert.title" class="img-responsive">
+                    </div>
+                  }
+
+                  <div class="concert-description">
+                    <p>{{ concert.description }}</p>
+
+                    @if (concert.ticketLink) {
+                      <a [href]="concert.ticketLink" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Réserver</a>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="no-concerts">
+          <p>Aucun concert n'est prévu pour le moment. Revenez bientôt pour découvrir nos prochaines dates.</p>
+        </div>
+      }
+    } @else {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Chargement des concerts...</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="past-concerts">
+  <div class="container">
+    <h2 class="section-title">Concerts passés</h2>
+
+    @if (pastConcerts$ | async; as pastConcerts) {
+      @if (pastConcerts.length > 0) {
+        <div class="concerts-grid">
+          @for (concert of pastConcerts; track concert.id) {
+            <div class="past-concert-card">
+              <div class="concert-image">
+                <img [src]="concert.imageUrl || '/assets/images/concerts/default.jpg'" [alt]="concert.title" class="img-responsive">
+                <div class="concert-date-overlay">
+                  <span class="day">{{ concert.date | date:'dd' }}</span>
+                  <span class="month">{{ concert.date | date:'MMM' }}</span>
+                  <span class="year">{{ concert.date | date:'yyyy' }}</span>
+                </div>
+              </div>
+
+              <div class="concert-content">
+                <h3 class="concert-title">{{ concert.title }}</h3>
+                <p class="concert-location">{{ concert.venue }} - {{ concert.city }}</p>
+                <p class="concert-description">{{ concert.description }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="no-concerts">
+          <p>Aucun concert passé n'est disponible.</p>
+        </div>
+      }
+    } @else {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Chargement des concerts...</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="booking-cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Vous souhaitez nous faire jouer ?</h2>
+      <p>Que ce soit pour un festival, un club, un événement privé ou une collaboration artistique, nous sommes ouverts à toutes propositions.</p>
+      <a routerLink="/contact" class="btn btn-primary">Contactez-nous</a>
+    </div>
+  </div>
+</section>

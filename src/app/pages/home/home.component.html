@@ -1,0 +1,124 @@
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">Collectif Ladyland</h1>
+    <p class="hero-subtitle">Une fusion unique de jazz, soul et musiques actuelles</p>
+    <div class="hero-buttons">
+      <a routerLink="/about" class="btn btn-primary">En savoir plus</a>
+      <a routerLink="/concerts" class="btn btn-secondary">Voir nos concerts</a>
+    </div>
+  </div>
+</section>
+
+<section class="welcome">
+  <div class="container">
+    <div class="section-header">
+      <h2>Bienvenue</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <p>Le Collectif Ladyland est un groupe formé à Paris en 2019, réunissant quatre musiciens aux influences diverses mais complémentaires. Notre musique fusionne jazz, soul, et sonorités électroniques dans un langage musical unique et moderne.</p>
+
+        <p>Portés par la voix puissante d'Emma Laurent, soutenus par une section rythmique solide et enrichis par des textures harmoniques complexes, nous créons un univers sonore à la fois accessible et sophistiqué.</p>
+
+        <a routerLink="/about" class="btn btn-outline">En savoir plus sur nous</a>
+      </div>
+
+      <div class="welcome-image">
+        <img src="/assets/images/home/collectif-group.jpg" alt="Collectif Ladyland" class="img-responsive">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="upcoming-concerts">
+  <div class="container">
+    <div class="section-header">
+      <h2>Concerts à venir</h2>
+      <div class="divider"></div>
+    </div>
+
+    @if (upcomingConcerts$ | async; as concerts) {
+      @if (concerts.length > 0) {
+        <div class="concerts-grid">
+          @for (concert of concerts.slice(0, 3); track concert.id) {
+            <div class="concert-card">
+              <div class="concert-image">
+                <img [src]="concert.imageUrl || '/assets/images/concerts/default.jpg'" [alt]="concert.title" class="img-responsive">
+              </div>
+              <div class="concert-date">{{ concert.date | date:'dd MMM yyyy' }}</div>
+              <h3 class="concert-title">{{ concert.title }}</h3>
+              <div class="concert-venue">{{ concert.venue }}, {{ concert.city }}</div>
+              @if (concert.ticketLink) {
+                <a [href]="concert.ticketLink" target="_blank" rel="noopener noreferrer" class="btn btn-sm">Billets</a>
+              }
+            </div>
+          }
+        </div>
+
+        @if (concerts.length > 3) {
+          <div class="text-center mt-4">
+            <a routerLink="/concerts" class="btn btn-outline">Voir tous les concerts</a>
+          </div>
+        }
+      } @else {
+        <p class="text-center">Aucun concert à venir pour le moment. Consultez notre page <a routerLink="/concerts">Concerts</a> régulièrement pour les mises à jour.</p>
+      }
+    } @else {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Chargement des concerts...</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="featured-media">
+  <div class="container">
+    <div class="section-header">
+      <h2>Média</h2>
+      <div class="divider"></div>
+    </div>
+
+    @if (featuredMedia$ | async; as media) {
+      @if (media.length > 0) {
+        <div class="media-grid">
+          @for (item of media.slice(0, 4); track item.id) {
+            <div class="media-card">
+              <div class="media-thumbnail">
+                <img [src]="item.thumbnailUrl || '/assets/images/gallery/default-thumb.jpg'" [alt]="item.title" class="img-responsive">
+                <div class="media-overlay">
+                  <span class="media-type-badge">{{ item.type }}</span>
+                </div>
+              </div>
+              <h3 class="media-title">{{ item.title }}</h3>
+              <p class="media-description">{{ item.description }}</p>
+            </div>
+          }
+        </div>
+
+        <div class="text-center mt-4">
+          <a routerLink="/gallery" class="btn btn-outline">Explorer notre galerie</a>
+        </div>
+      } @else {
+        <p class="text-center">Contenu média à venir. Consultez notre <a routerLink="/gallery">Galerie</a> régulièrement pour les mises à jour.</p>
+      }
+    } @else {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Chargement des médias...</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Vous souhaitez nous contacter ?</h2>
+      <p>Pour toute demande concernant des réservations, interviews ou collaborations, n'hésitez pas à nous envoyer un message.</p>
+      <a routerLink="/contact" class="btn btn-primary">Contactez-nous</a>
+    </div>
+  </div>
+</section>
