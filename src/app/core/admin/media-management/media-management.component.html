@@ -1,0 +1,156 @@
+<div class="media-management">
+  <div class="management-header">
+    <h2>Gestion des médias</h2>
+    <button class="add-btn" (click)="showAddForm()" *ngIf="!showForm">
+      <i class="fas fa-plus"></i> Ajouter un média
+    </button>
+  </div>
+
+  <!-- Filtres de médias -->
+  <div class="media-filters" *ngIf="!showForm">
+    <button
+      class="filter-btn"
+      [class.active]="activeFilter === 'all'"
+      (click)="filterMedia('all')"
+    >
+      Tous
+    </button>
+    <button
+      class="filter-btn"
+      [class.active]="activeFilter === MediaType.PHOTO"
+      (click)="filterMedia(MediaType.PHOTO)"
+    >
+      Photos
+    </button>
+    <button
+      class="filter-btn"
+      [class.active]="activeFilter === MediaType.VIDEO"
+      (click)="filterMedia(MediaType.VIDEO)"
+    >
+      Vidéos
+    </button>
+    <button
+      class="filter-btn"
+      [class.active]="activeFilter === MediaType.AUDIO"
+      (click)="filterMedia(MediaType.AUDIO)"
+    >
+      Audio
+    </button>
+  </div>
+
+  <!-- Liste des médias -->
+  <div class="media-grid" *ngIf="!showForm">
+    <div class="no-items" *ngIf="filteredMedia.length === 0">
+      <p>Aucun média trouvé.</p>
+    </div>
+
+    <div class="media-card" *ngFor="let item of filteredMedia">
+      <div class="media-thumbnail">
+        <img [src]="item.thumbnailUrl || item.url" [alt]="item.title">
+        <div class="media-overlay">
+          <span class="media-type-badge">{{ getMediaTypeLabel(item.type) }}</span>
+          <span class="featured-badge" *ngIf="item.featured">
+            <i class="fas fa-star"></i> À la une
+          </span>
+        </div>
+      </div>
+
+      <div class="media-info">
+        <h3>{{ item.title }}</h3>
+        <p class="media-date">Ajouté le {{ item.uploadDate | date:'dd/MM/yyyy' }}</p>
+
+        <div class="media-actions">
+          <button class="action-btn edit-btn" (click)="editMedia(item)" title="Modifier">
+            <i class="fas fa-edit"></i> Modifier
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteMedia(item.id)" title="Supprimer">
+            <i class="fas fa-trash-alt"></i> Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire d'ajout/édition -->
+  <div class="media-form" *ngIf="showForm">
+    <h3>{{ editMode ? 'Modifier' : 'Ajouter' }} un média</h3>
+
+    <form [formGroup]="mediaForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">Titre <span class="required">*</span></label>
+          <input type="text" id="title" formControlName="title" [class.is-invalid]="mediaForm.get('title')?.invalid && mediaForm.get('title')?.touched">
+          <div class="error-message" *ngIf="mediaForm.get('title')?.invalid && mediaForm.get('title')?.touched">
+            Le titre est requis.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="type">Type <span class="required">*</span></label>
+          <select id="type" formControlName="type">
+            <option [value]="MediaType.PHOTO">Photo</option>
+            <option [value]="MediaType.VIDEO">Vidéo</option>
+            <option [value]="MediaType.AUDIO">Audio</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" rows="3"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="url">URL <span class="required">*</span></label>
+          <input type="text" id="url" formControlName="url" [class.is-invalid]="mediaForm.get('url')?.invalid && mediaForm.get('url')?.touched"
+                 placeholder="Pour les vidéos YouTube ou audio SoundCloud, entrez l'URL d'intégration">
+          <div class="error-message" *ngIf="mediaForm.get('url')?.invalid && mediaForm.get('url')?.touched">
+            L'URL est requise.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sortOrder">Ordre d'affichage</label>
+          <input type="number" id="sortOrder" formControlName="sortOrder" min="0">
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="mediaForm.get('type')?.value === MediaType.PHOTO">
+        <label for="mainFile">Fichier Photo</label>
+        <input type="file" id="mainFile" (change)="onMainFileSelected($event)" accept="image/*">
+        <small>Si vous téléchargez une nouvelle image, elle remplacera l'URL ci-dessus</small>
+
+        <div class="current-image" *ngIf="currentUrl">
+          <p>Photo actuelle:</p>
+          <img [src]="currentUrl" alt="Media">
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="mediaForm.get('type')?.value !== MediaType.PHOTO">
+        <label for="thumbnailFile">Image Miniature</label>
+        <input type="file" id="thumbnailFile" (change)="onThumbnailSelected($event)" accept="image/*">
+
+        <div class="current-image" *ngIf="currentThumbnailUrl">
+          <p>Miniature actuelle:</p>
+          <img [src]="currentThumbnailUrl" alt="Thumbnail">
+        </div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" formControlName="featured">
+          Mettre ce média à la une
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="cancelForm()">Annuler</button>
+        <button type="submit" class="submit-btn" [disabled]="mediaForm.invalid || isSubmitting">
+          <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+          {{ editMode ? 'Modifier' : 'Ajouter' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

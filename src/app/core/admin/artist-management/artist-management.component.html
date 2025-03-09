@@ -1,0 +1,108 @@
+<div class="artist-management">
+  <div class="management-header">
+    <h2>Gestion des artistes</h2>
+    <button class="add-btn" (click)="showAddForm()" *ngIf="!showForm">
+      <i class="fas fa-plus"></i> Ajouter un artiste
+    </button>
+  </div>
+
+  <!-- Liste des artistes -->
+  <div class="artists-grid" *ngIf="!showForm">
+    <div class="no-items" *ngIf="artists.length === 0">
+      <p>Aucun artiste trouvé.</p>
+    </div>
+
+    <div class="artist-card" *ngFor="let artist of artists">
+      <div class="artist-photo">
+        <img [src]="artist.photoUrl" [alt]="artist.name">
+      </div>
+      <div class="artist-info">
+        <h3>{{ artist.name }}</h3>
+        <p class="artist-role">{{ artist.role }}</p>
+        <div class="artist-actions">
+          <button class="action-btn edit-btn" (click)="editArtist(artist)" title="Modifier">
+            <i class="fas fa-edit"></i> Modifier
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteArtist(artist.id)" title="Supprimer">
+            <i class="fas fa-trash-alt"></i> Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire d'ajout/édition -->
+  <div class="artist-form" *ngIf="showForm">
+    <h3>{{ editMode ? 'Modifier' : 'Ajouter' }} un artiste</h3>
+
+    <form [formGroup]="artistForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Nom <span class="required">*</span></label>
+          <input type="text" id="name" formControlName="name" [class.is-invalid]="artistForm.get('name')?.invalid && artistForm.get('name')?.touched">
+          <div class="error-message" *ngIf="artistForm.get('name')?.invalid && artistForm.get('name')?.touched">
+            Le nom est requis.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Rôle <span class="required">*</span></label>
+          <input type="text" id="role" formControlName="role" [class.is-invalid]="artistForm.get('role')?.invalid && artistForm.get('role')?.touched">
+          <div class="error-message" *ngIf="artistForm.get('role')?.invalid && artistForm.get('role')?.touched">
+            Le rôle est requis.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Biographie <span class="required">*</span></label>
+        <textarea id="bio" formControlName="bio" rows="5" [class.is-invalid]="artistForm.get('bio')?.invalid && artistForm.get('bio')?.touched"></textarea>
+        <div class="error-message" *ngIf="artistForm.get('bio')?.invalid && artistForm.get('bio')?.touched">
+          <span *ngIf="artistForm.get('bio')?.errors?.['required']">La biographie est requise.</span>
+          <span *ngIf="artistForm.get('bio')?.errors?.['minlength']">La biographie doit contenir au moins 10 caractères.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="photoFile">Photo</label>
+        <input type="file" id="photoFile" (change)="onFileSelected($event)" accept="image/*">
+        <div class="current-image" *ngIf="currentPhotoUrl">
+          <p>Photo actuelle:</p>
+          <img [src]="currentPhotoUrl" alt="Photo de l'artiste">
+        </div>
+      </div>
+
+      <div formGroupName="socialLinks" class="social-links-form">
+        <h4>Réseaux sociaux</h4>
+
+        <div class="form-group">
+          <label for="instagram">Instagram</label>
+          <input type="text" id="instagram" formControlName="instagram" placeholder="https://www.instagram.com/username">
+        </div>
+
+        <div class="form-group">
+          <label for="facebook">Facebook</label>
+          <input type="text" id="facebook" formControlName="facebook" placeholder="https://www.facebook.com/username">
+        </div>
+
+        <div class="form-group">
+          <label for="twitter">Twitter</label>
+          <input type="text" id="twitter" formControlName="twitter" placeholder="https://twitter.com/username">
+        </div>
+
+        <div class="form-group">
+          <label for="soundcloud">SoundCloud</label>
+          <input type="text" id="soundcloud" formControlName="soundcloud" placeholder="https://soundcloud.com/username">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="cancelForm()">Annuler</button>
+        <button type="submit" class="submit-btn" [disabled]="artistForm.invalid || isSubmitting">
+          <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+          {{ editMode ? 'Modifier' : 'Ajouter' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

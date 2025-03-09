@@ -10,17 +10,17 @@ export class GalleryService {
   constructor(private apiService: ApiService) { }
 
   getAllMedia(): Observable<Media[]> {
-    return this.apiService.getMedia();
+    return this.apiService.getMedias();
   }
 
   getFeaturedMedia(): Observable<Media[]> {
-    return this.apiService.getMedia().pipe(
+    return this.apiService.getMedias().pipe(
       map(mediaList => mediaList.filter(media => media.featured))
     );
   }
 
   getMediaByType(type: MediaType): Observable<Media[]> {
-    return this.apiService.getMedia().pipe(
+    return this.apiService.getMedias().pipe(
       map(mediaList => mediaList.filter(media => media.type === type))
     );
   }

@@ -1,0 +1,77 @@
+<div class="admin-dashboard">
+  <header class="admin-header">
+    <h1>Administration - Collectif Ladyland</h1>
+    <button (click)="logout()" class="logout-btn">Déconnexion</button>
+  </header>
+
+  <div class="dashboard-container">
+    <nav class="admin-nav">
+      <ul>
+        <li><a routerLink="/admin/dashboard/concerts" routerLinkActive="active">Concerts</a></li>
+        <li><a routerLink="/admin/dashboard/artists" routerLinkActive="active">Artistes</a></li>
+        <li><a routerLink="/admin/dashboard/media" routerLinkActive="active">Média</a></li>
+        <li><a routerLink="/admin/dashboard/contacts" routerLinkActive="active">Messages</a></li>
+      </ul>
+    </nav>
+
+    <main class="admin-content">
+      <div class="dashboard-stats" *ngIf="router.url === '/admin/dashboard'">
+        <h2>Tableau de bord</h2>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-music"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Artistes</h3>
+              <p class="stat-value">{{ stats.artists }}</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Concerts</h3>
+              <p class="stat-value">{{ stats.concerts }}</p>
+              <p class="stat-detail">{{ stats.upcomingConcerts }} à venir</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-photo-video"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Médias</h3>
+              <p class="stat-value">{{ stats.media }}</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Messages</h3>
+              <p class="stat-value">{{ stats.messages }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <a routerLink="/admin/dashboard/concerts" class="action-btn">
+            <i class="fas fa-plus"></i> Ajouter un concert
+          </a>
+          <a routerLink="/admin/dashboard/media" class="action-btn">
+            <i class="fas fa-upload"></i> Télécharger des médias
+          </a>
+        </div>
+      </div>
+
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
