@@ -3,7 +3,7 @@
 
 /* Variables */
 :root {
-  --primary-color: #e09100;
+  --primary-color: #bb0b0b;
   --secondary-color: #121212;
   --accent-color: #f8f8f8;
   --text-color: #333333;
@@ -42,7 +42,7 @@ a {
   transition: color 0.3s ease;
 
   &:hover {
-    color: color.adjust(#e09100, $lightness: -10%);
+    color: color.adjust(#bb0b0b, $lightness: -10%);
   }
 }
 
@@ -80,7 +80,7 @@ p {
     color: var(--light-text);
 
     &:hover {
-      background-color: color.adjust(#e09100, $lightness: -10%);
+      background-color: color.adjust(#bb0b0b, $lightness: -10%);
     }
   }
 

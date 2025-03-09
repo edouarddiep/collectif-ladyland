@@ -68,7 +68,7 @@ export class ArtistManagementComponent implements OnInit {
   }
 
   loadArtists(): void {
-    this.http.get<Artist[]>('http://localhost:3000/artists')
+    this.http.get<Artist[]>('http://localhost:3000/api/artists')
       .subscribe(data => {
         this.artists = data;
       });
@@ -111,7 +111,7 @@ export class ArtistManagementComponent implements OnInit {
       const fileFormData = new FormData();
       fileFormData.append('file', this.selectedFile);
 
-      this.http.post<any>('http://localhost:3000/upload/image', fileFormData)
+      this.http.post<any>('http://localhost:3000/api/upload/image', fileFormData)
         .subscribe({
           next: (fileResponse) => {
             // Ajoutez l'URL de la photo au formulaire
@@ -134,7 +134,7 @@ export class ArtistManagementComponent implements OnInit {
 
   saveArtist(formData: any): void {
     if (this.editMode && this.editingId) {
-      this.http.put<Artist>(`http://localhost:3000/artists/${this.editingId}`, formData)
+      this.http.put<Artist>(`http://localhost:3000/api/artists/${this.editingId}`, formData)
         .subscribe({
           next: () => {
             this.isSubmitting = false;
@@ -147,7 +147,7 @@ export class ArtistManagementComponent implements OnInit {
           }
         });
     } else {
-      this.http.post<Artist>('http://localhost:3000/artists', formData)
+      this.http.post<Artist>('http://localhost:3000/api/artists', formData)
         .subscribe({
           next: () => {
             this.isSubmitting = false;
@@ -164,7 +164,7 @@ export class ArtistManagementComponent implements OnInit {
 
   deleteArtist(id: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet artiste ?')) {
-      this.http.delete(`http://localhost:3000/artists/${id}`)
+      this.http.delete(`http://localhost:3000/api/artists/${id}`)
         .subscribe({
           next: () => {
             this.loadArtists();

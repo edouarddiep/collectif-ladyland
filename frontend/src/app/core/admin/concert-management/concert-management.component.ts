@@ -63,7 +63,7 @@ export class ConcertManagementComponent implements OnInit {
   }
 
   loadConcerts(): void {
-    this.http.get<Concert[]>('http://localhost:3000/concerts')
+    this.http.get<Concert[]>('http://localhost:3000/api/concerts')
       .subscribe(data => {
         this.concerts = data;
         this.filteredConcerts = [...this.concerts];
@@ -107,7 +107,7 @@ export class ConcertManagementComponent implements OnInit {
       const fileFormData = new FormData();
       fileFormData.append('file', this.selectedFile);
 
-      this.http.post<any>('http://localhost:3000/upload/image', fileFormData)
+      this.http.post<any>('http://localhost:3000/api/upload/image', fileFormData)
         .subscribe({
           next: (fileResponse) => {
             // Ajoutez l'URL de l'image au formulaire
@@ -130,7 +130,7 @@ export class ConcertManagementComponent implements OnInit {
 
   saveConcert(formData: any): void {
     if (this.editMode && this.editingId) {
-      this.http.put<Concert>(`http://localhost:3000/concerts/${this.editingId}`, formData)
+      this.http.put<Concert>(`http://localhost:3000/api/concerts/${this.editingId}`, formData)
         .subscribe({
           next: () => {
             this.isSubmitting = false;
@@ -143,7 +143,7 @@ export class ConcertManagementComponent implements OnInit {
           }
         });
     } else {
-      this.http.post<Concert>('http://localhost:3000/concerts', formData)
+      this.http.post<Concert>('http://localhost:3000/api/concerts', formData)
         .subscribe({
           next: () => {
             this.isSubmitting = false;
@@ -160,7 +160,7 @@ export class ConcertManagementComponent implements OnInit {
 
   deleteConcert(id: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce concert ?')) {
-      this.http.delete(`http://localhost:3000/concerts/${id}`)
+      this.http.delete(`http://localhost:3000/api/concerts/${id}`)
         .subscribe({
           next: () => {
             this.loadConcerts();

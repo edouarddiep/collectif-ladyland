@@ -10,7 +10,7 @@ import { ContactForm, ContactResponse } from '../../models/contact.model';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000'; // URL de votre API NestJS
+  private apiUrl = 'http://localhost:3000/api'; // URL de votre API NestJS
 
   constructor(private http: HttpClient) { }
 

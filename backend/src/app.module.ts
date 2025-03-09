@@ -19,6 +19,7 @@ import {FirebaseModule} from "./auth/firebase.module";
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+      envFilePath: ['.env'],
     }),
     ServeStaticModule.forRootAsync({
       imports: [ConfigModule],
@@ -31,7 +32,7 @@ import {FirebaseModule} from "./auth/firebase.module";
     AuthModule,
     ArtistsModule,
     ConcertsModule,
-      FirebaseModule,
+    FirebaseModule,
     MediaModule,
     ContactModule,
     UploadModule,

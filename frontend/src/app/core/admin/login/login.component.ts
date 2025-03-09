@@ -48,10 +48,10 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.authService.login(
-      this.loginForm.get('username')?.value,
-      this.loginForm.get('password')?.value
-    ).subscribe({
+    this.authService.login({
+      username: this.loginForm.get('username')?.value,
+      password: this.loginForm.get('password')?.value
+    }).subscribe({
       next: () => {
         this.router.navigate([this.returnUrl]);
       },

@@ -33,27 +33,27 @@ export class DashboardComponent implements OnInit {
 
   loadStats(): void {
     // Artistes
-    this.http.get<any[]>('http://localhost:3000/artists').subscribe(data => {
+    this.http.get<any[]>('http://localhost:3000/api/artists').subscribe(data => {
       this.stats.artists = data.length;
     });
 
     // Concerts
-    this.http.get<any[]>('http://localhost:3000/concerts').subscribe(data => {
+    this.http.get<any[]>('http://localhost:3000/api/concerts').subscribe(data => {
       this.stats.concerts = data.length;
     });
 
     // Concerts à venir
-    this.http.get<any[]>('http://localhost:3000/concerts/upcoming').subscribe(data => {
+    this.http.get<any[]>('http://localhost:3000/api/concerts/upcoming').subscribe(data => {
       this.stats.upcomingConcerts = data.length;
     });
 
     // Médias
-    this.http.get<any[]>('http://localhost:3000/media').subscribe(data => {
+    this.http.get<any[]>('http://localhost:3000/api/media').subscribe(data => {
       this.stats.media = data.length;
     });
 
     // Messages
-    this.http.get<any[]>('http://localhost:3000/contact').subscribe(data => {
+    this.http.get<any[]>('http://localhost:3000/api/contact').subscribe(data => {
       this.stats.messages = data.length;
     });
   }

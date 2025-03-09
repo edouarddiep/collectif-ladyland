@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {AuthGuard} from './core/admin/auth.guard';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,7 @@ export const routes: Routes = [
     path: 'admin/dashboard',
     loadComponent: () => import('./core/admin/dashboard/dashboard.component').then(m => m.DashboardComponent),
     title: 'Admin Dashboard - Collectif Ladyland',
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'concerts',

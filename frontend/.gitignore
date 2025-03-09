@@ -34,3 +34,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environnement
+.env
+*.env
+!.env.example

@@ -78,7 +78,7 @@ export class MediaManagementComponent implements OnInit {
   }
 
   loadMedia(): void {
-    this.http.get<Media[]>('http://localhost:3000/media')
+    this.http.get<Media[]>('http://localhost:3000/api/media')
       .subscribe(data => {
         this.media = data;
         this.filterMedia(this.activeFilter);
@@ -155,7 +155,7 @@ export class MediaManagementComponent implements OnInit {
         const fileFormData = new FormData();
         fileFormData.append('file', this.selectedFile!);
 
-        this.http.post<any>('http://localhost:3000/upload/image', fileFormData)
+        this.http.post<any>('http://localhost:3000/api/upload/image', fileFormData)
           .subscribe({
             next: (response) => {
               formData.url = `http://localhost:3000${response.path}`;
@@ -178,7 +178,7 @@ export class MediaManagementComponent implements OnInit {
         const thumbnailFormData = new FormData();
         thumbnailFormData.append('file', this.selectedThumbnail!);
 
-        this.http.post<any>('http://localhost:3000/upload/image', thumbnailFormData)
+        this.http.post<any>('http://localhost:3000/api/upload/image', thumbnailFormData)
           .subscribe({
             next: (response) => {
               formData.thumbnailUrl = `http://localhost:3000${response.path}`;
@@ -207,7 +207,7 @@ export class MediaManagementComponent implements OnInit {
 
   saveMedia(formData: any): void {
     if (this.editMode && this.editingId) {
-      this.http.put<Media>(`http://localhost:3000/media/${this.editingId}`, formData)
+      this.http.put<Media>(`http://localhost:3000/api/media/${this.editingId}`, formData)
         .subscribe({
           next: () => {
             this.isSubmitting = false;
@@ -220,7 +220,7 @@ export class MediaManagementComponent implements OnInit {
           }
         });
     } else {
-      this.http.post<Media>('http://localhost:3000/media', formData)
+      this.http.post<Media>('http://localhost:3000/api/media', formData)
         .subscribe({
           next: () => {
             this.isSubmitting = false;
@@ -237,7 +237,7 @@ export class MediaManagementComponent implements OnInit {
 
   deleteMedia(id: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce média ?')) {
-      this.http.delete(`http://localhost:3000/media/${id}`)
+      this.http.delete(`http://localhost:3000/api/media/${id}`)
         .subscribe({
           next: () => {
             this.loadMedia();

@@ -34,7 +34,7 @@
     left: 0;
     width: 50px;
     height: 2px;
-    background-color: #e09100;
+    background-color: #bb0b0b;
   }
 }
 
@@ -53,7 +53,7 @@
     transition: color 0.3s ease;
 
     &:hover {
-      color: #e09100;
+      color: #bb0b0b;
     }
   }
 }
@@ -76,7 +76,7 @@
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #e09100;
+    background-color: #bb0b0b;
     transform: translateY(-3px);
   }
 
