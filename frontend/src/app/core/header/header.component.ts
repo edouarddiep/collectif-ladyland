@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -18,4 +19,14 @@ export class HeaderComponent {
     { path: 'gallery', label: 'Galerie', exact: false },
     { path: 'contact', label: 'Contact', exact: false }
   ];
+
+  menuOpen$ = new BehaviorSubject<boolean>(false);
+
+  toggleMenu(): void {
+    this.menuOpen$.next(!this.menuOpen$.getValue());
+  }
+
+  closeMenu(): void {
+    this.menuOpen$.next(false);
+  }
 }

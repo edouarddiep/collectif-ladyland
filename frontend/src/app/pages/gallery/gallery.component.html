@@ -52,11 +52,17 @@
               (click)="toggleMediaDetails(media.id)"
             >
               <div class="gallery-thumbnail">
-                <img [src]="media.thumbnailUrl || '/assets/images/gallery/default-thumb.jpg'" [alt]="media.title" class="img-responsive">
+                <!-- Utiliser thumbnailUrl s'il existe, sinon utiliser url pour les photos -->
+                <img
+                  [src]="getThumbnailUrl(media)"
+                  [alt]="media.title || 'Media item'"
+                  class="img-responsive"
+                  onError="this.src='/assets/images/gallery/default-thumb.jpg'"
+                >
                 <div class="media-overlay">
                   <span class="media-type-badge">{{ getMediaTypeLabel(media.type) }}</span>
                   <div class="media-info">
-                    <h3 class="media-title">{{ media.title }}</h3>
+                    <h3 class="media-title">{{ media.title || 'Sans titre' }}</h3>
                     <p class="media-date">{{ media.uploadDate | date:'dd MMM yyyy' }}</p>
                   </div>
                 </div>
@@ -72,7 +78,7 @@
                     <div class="media-content">
                       @if (media.type === MediaType.PHOTO) {
                         <div class="media-photo">
-                          <img [src]="media.url" [alt]="media.title" class="img-responsive">
+                          <img [src]="media.url" [alt]="media.title || 'Photo'" class="img-responsive">
                         </div>
                       } @else if (media.type === MediaType.VIDEO && isSafeUrl(media.url)) {
                         <div class="media-video">
@@ -97,8 +103,8 @@
                     </div>
 
                     <div class="media-info-full">
-                      <h2 class="media-title-full">{{ media.title }}</h2>
-                      <p class="media-description">{{ media.description }}</p>
+                      <h2 class="media-title-full">{{ media.title || 'Sans titre' }}</h2>
+                      <p class="media-description" *ngIf="media.description">{{ media.description }}</p>
                       <p class="media-meta">Ajouté le {{ media.uploadDate | date:'longDate' }}</p>
                     </div>
                   </div>

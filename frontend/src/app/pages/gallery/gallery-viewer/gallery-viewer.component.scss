@@ -1,0 +1,365 @@
+@use 'sass:color';
+
+// Variables
+$primary-color: #bb0b0b;
+$secondary-color: #121212;
+$light-text: #ffffff;
+$dark-overlay: rgba(0, 0, 0, 0.85);
+
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.viewer-container {
+  width: 100%;
+  height: 100%;
+  background-color: $dark-overlay;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  &.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    background-color: #000;
+  }
+}
+
+.viewer-content {
+  position: relative;
+  max-width: calc(100% - 40px);
+  max-height: calc(100% - 180px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 4px;
+  animation: scaleIn 0.3s ease-out;
+
+  @media (max-width: 768px) {
+    max-width: calc(100% - 20px);
+    max-height: calc(100% - 140px);
+  }
+}
+
+// Photo Content
+.photo-content {
+  position: relative;
+  max-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .viewer-img {
+    max-width: 100%;
+    max-height: calc(100vh - 200px);
+    object-fit: contain;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    background-color: #000;
+
+    @media (max-width: 768px) {
+      max-height: calc(100vh - 160px);
+    }
+  }
+}
+
+// Video Content
+.video-content {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+// Audio Content
+.audio-content {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .audio-wrapper {
+    position: relative;
+    background-color: #000;
+    padding-top: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+
+    .audio-thumbnail {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      opacity: 0.7;
+    }
+
+    iframe {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 160px;
+      border-radius: 0;
+    }
+  }
+}
+
+// Item Info
+.item-info {
+  margin-top: 15px;
+  color: $light-text;
+  text-align: center;
+  max-width: 600px;
+  padding: 0 10px;
+
+  .item-title {
+    font-size: 1.4rem;
+    margin: 0 0 10px 0;
+  }
+
+  .item-description {
+    font-size: 1rem;
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+    opacity: 0.9;
+  }
+
+  .item-date {
+    font-size: 0.9rem;
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    .item-title {
+      font-size: 1.2rem;
+    }
+
+    .item-description {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Navigation Controls
+.viewer-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .nav-btn {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: $light-text;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.8);
+      transform: scale(1.1);
+    }
+
+    &.prev-btn {
+      margin-left: 20px;
+    }
+
+    &.next-btn {
+      margin-right: 20px;
+    }
+
+    i {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      width: 36px;
+      height: 36px;
+
+      &.prev-btn {
+        margin-left: 10px;
+      }
+
+      &.next-btn {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+// Toolbar
+.viewer-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  color: $light-text;
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+
+    .counter {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  }
+
+  .toolbar-right {
+    display: flex;
+    gap: 15px;
+
+    .toolbar-btn {
+      background: none;
+      border: none;
+      color: $light-text;
+      opacity: 0.8;
+      cursor: pointer;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
+
+      &.active {
+        color: $primary-color;
+        opacity: 1;
+      }
+
+      &.close-btn {
+        font-size: 1.2rem;
+      }
+
+      i {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// Thumbnails Navigation
+.thumbnails-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 15px;
+
+  .thumbnails-container {
+    display: flex;
+    gap: 10px;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0 20px 5px;
+    scrollbar-width: thin;
+    scrollbar-color: $primary-color rgba(255, 255, 255, 0.1);
+
+    &::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $primary-color;
+      border-radius: 10px;
+    }
+  }
+
+  .thumbnail-item {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    &.active {
+      border-color: $primary-color;
+    }
+
+    .thumbnail-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

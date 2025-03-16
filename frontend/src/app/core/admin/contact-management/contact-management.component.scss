@@ -1,0 +1,231 @@
+@use 'sass:color';
+
+// Variables
+$primary-color: #bb0b0b;
+$secondary-color: #121212;
+$accent-color: #f8f8f8;
+$text-color: #333333;
+$light-text: #ffffff;
+$error-color: #dc3545;
+$success-color: #28a745;
+
+.contact-management {
+  background-color: $light-text;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+.management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: $secondary-color;
+  }
+}
+
+.messages-list {
+  margin-bottom: 2rem;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: $accent-color;
+      color: $secondary-color;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: rgba($accent-color, 0.5);
+    }
+
+    tr.unread {
+      font-weight: 600;
+      background-color: rgba($primary-color, 0.05);
+    }
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+
+    &.read {
+      background-color: rgba($success-color, 0.1);
+      color: $success-color;
+    }
+
+    &.unread {
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+    }
+  }
+
+  .actions-cell {
+    white-space: nowrap;
+  }
+
+  .action-btn {
+    padding: 0.4rem;
+    margin-right: 0.5rem;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.view-btn {
+      color: #4285F4;
+
+      &:hover {
+        background-color: rgba(#4285F4, 0.1);
+        border-color: #4285F4;
+      }
+    }
+
+    &.delete-btn {
+      color: $error-color;
+
+      &:hover {
+        background-color: rgba($error-color, 0.1);
+        border-color: $error-color;
+      }
+    }
+  }
+
+  .no-items {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+// Modal styles
+.message-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: $light-text;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: $secondary-color;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+  }
+}
+
+.modal-body {
+  padding: 1rem;
+
+  .message-info {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .message-content {
+    white-space: pre-line;
+  }
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+// Button styles
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &.btn-primary {
+    background-color: $primary-color;
+    color: $light-text;
+    border: 1px solid $primary-color;
+
+    &:hover {
+      background-color: color.adjust($primary-color, $lightness: -10%);
+    }
+  }
+
+  &.btn-secondary {
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #ddd;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .messages-list {
+    overflow-x: auto;
+
+    table {
+      min-width: 650px;
+    }
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+}

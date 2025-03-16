@@ -10,7 +10,7 @@ export class ConcertsService {
 
     constructor(private firebaseService: FirebaseService) {}
 
-    async create(createConcertDto: CreateConcertDto): Promise<Concert> {
+    async create(createConcertDto): Promise<Concert> {
         const db = this.firebaseService.getFirestore();
 
         // Récupérer le dernier ID pour auto-incrémenter
@@ -23,11 +23,11 @@ export class ConcertsService {
             nextId = lastConcert.id + 1;
         }
 
-        // Créer le nouveau concert
-        const newConcert: Concert = {
+        // Créer le nouvel objet (important : convertir en objet simple JSON)
+        const newConcert = {
             id: nextId,
-            ...createConcertDto
-        };
+            ...JSON.parse(JSON.stringify(createConcertDto))  // ⬅️ Cette ligne transforme l'objet DTO en objet JSON simple
+        } as Concert;
 
         // Sauvegarder dans Firestore
         await concertsRef.doc(nextId.toString()).set(newConcert);
@@ -92,7 +92,7 @@ export class ConcertsService {
         return concertDoc.data() as Concert;
     }
 
-    async update(id: number, updateConcertDto: UpdateConcertDto): Promise<Concert> {
+    async update(id: number, updateConcertDto): Promise<Concert> {
         const db = this.firebaseService.getFirestore();
         const concertRef = db.collection(this.collection).doc(id.toString());
         const concertDoc = await concertRef.get();
@@ -101,14 +101,22 @@ export class ConcertsService {
             throw new NotFoundException(`Concert avec l'ID ${id} non trouvé`);
         }
 
-        const updatedConcert = {
-            ...concertDoc.data(),
-            ...updateConcertDto
+        // Récupérer les données existantes
+        const existingData = concertDoc.data() || {};
+
+        // Convertir le DTO en objet simple avant la fusion
+        const updateData = JSON.parse(JSON.stringify(updateConcertDto));
+
+        // Créer un objet de mise à jour sécurisé
+        const updatedConcertData = {
+            ...existingData,
+            ...updateData,
+            id: existingData.id
         };
 
-        await concertRef.update(updatedConcert);
+        await concertRef.update(updatedConcertData);
 
-        return updatedConcert as Concert;
+        return updatedConcertData as Concert;
     }
 
     async remove(id: number): Promise<void> {

@@ -6,12 +6,12 @@ export enum MediaType {
 
 export interface Media {
   id: number;
-  title: string;
-  description?: string;
-  type: MediaType;
-  url: string;
-  thumbnailUrl?: string;
-  uploadDate: string; // ISO format
   featured?: boolean;
+  uploadDate: string;
   sortOrder?: number;
+  description?: string;
+  title?: string;
+  type: MediaType;
+  url?: string;
+  thumbnailUrl?: string
 }

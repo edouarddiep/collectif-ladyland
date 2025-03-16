@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {AuthGuard} from './core/admin/auth.guard';
+import { AuthGuard } from './core/admin/auth.guard';
 
 export const routes: Routes = [
   {
@@ -20,15 +20,23 @@ export const routes: Routes = [
     children: [
       {
         path: 'concerts',
-        loadComponent: () => import('./core/admin/concert-management/concert-management.component').then(m => m.ConcertManagementComponent)
+        loadComponent: () => import('./core/admin/concert-management/concert-management.component').then(m => m.ConcertManagementComponent),
+        runGuardsAndResolvers: 'always'
       },
       {
         path: 'artists',
-        loadComponent: () => import('./core/admin/artist-management/artist-management.component').then(m => m.ArtistManagementComponent)
+        loadComponent: () => import('./core/admin/artist-management/artist-management.component').then(m => m.ArtistManagementComponent),
+        runGuardsAndResolvers: 'always'
       },
       {
         path: 'media',
-        loadComponent: () => import('./core/admin/media-management/media-management.component').then(m => m.MediaManagementComponent)
+        loadComponent: () => import('./core/admin/media-management/media-management.component').then(m => m.MediaManagementComponent),
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'contacts',
+        loadComponent: () => import('./core/admin/contact-management/contact-management.component').then(m => m.ContactManagementComponent),
+        runGuardsAndResolvers: 'always'
       },
       { path: '', redirectTo: 'concerts', pathMatch: 'full' }
     ]

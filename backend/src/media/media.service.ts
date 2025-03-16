@@ -23,6 +23,29 @@ export class MediaService {
       nextId = lastMedia.id + 1;
     }
 
+    // Gérer le cas où il n'y a pas de titre
+    if (!createMediaDto.title || createMediaDto.title.trim() === '') {
+      // Générer un titre par défaut basé sur le type
+      switch (createMediaDto.type) {
+        case MediaType.PHOTO:
+          createMediaDto.title = `Photo ${nextId}`;
+          break;
+        case MediaType.VIDEO:
+          createMediaDto.title = `Vidéo ${nextId}`;
+          break;
+        case MediaType.AUDIO:
+          createMediaDto.title = `Audio ${nextId}`;
+          break;
+        default:
+          createMediaDto.title = `Média ${nextId}`;
+      }
+    }
+
+    // Pour les photos, si aucune miniature n'est fournie, utiliser l'URL principale
+    if (createMediaDto.type === MediaType.PHOTO && !createMediaDto.thumbnailUrl && createMediaDto.url) {
+      createMediaDto.thumbnailUrl = createMediaDto.url;
+    }
+
     // Créer le nouveau média
     const newMedia: Media = {
       id: nextId,
@@ -33,10 +56,10 @@ export class MediaService {
     // Convertir l'objet en format compatible avec Firestore
     const mediaData = {
       id: newMedia.id,
-      title: newMedia.title,
+      title: newMedia.title || '',
       description: newMedia.description || '',
       type: newMedia.type,
-      url: newMedia.url,
+      url: newMedia.url || '',
       thumbnailUrl: newMedia.thumbnailUrl || '',
       uploadDate: newMedia.uploadDate,
       featured: newMedia.featured || false,
@@ -58,7 +81,16 @@ export class MediaService {
       return [];
     }
 
-    return snapshot.docs.map(doc => doc.data() as Media);
+    return snapshot.docs.map(doc => {
+      const media = doc.data() as Media;
+
+      // Assurer que les photos ont une miniature (utiliser l'URL principale si nécessaire)
+      if (media.type === MediaType.PHOTO && !media.thumbnailUrl && media.url) {
+        media.thumbnailUrl = media.url;
+      }
+
+      return media;
+    });
   }
 
   async findFeatured(): Promise<Media[]> {
@@ -74,7 +106,16 @@ export class MediaService {
       return [];
     }
 
-    return snapshot.docs.map(doc => doc.data() as Media);
+    return snapshot.docs.map(doc => {
+      const media = doc.data() as Media;
+
+      // Assurer que les photos ont une miniature (utiliser l'URL principale si nécessaire)
+      if (media.type === MediaType.PHOTO && !media.thumbnailUrl && media.url) {
+        media.thumbnailUrl = media.url;
+      }
+
+      return media;
+    });
   }
 
   async findByType(type: MediaType): Promise<Media[]> {
@@ -90,7 +131,16 @@ export class MediaService {
       return [];
     }
 
-    return snapshot.docs.map(doc => doc.data() as Media);
+    return snapshot.docs.map(doc => {
+      const media = doc.data() as Media;
+
+      // Assurer que les photos ont une miniature (utiliser l'URL principale si nécessaire)
+      if (media.type === MediaType.PHOTO && !media.thumbnailUrl && media.url) {
+        media.thumbnailUrl = media.url;
+      }
+
+      return media;
+    });
   }
 
   async findOne(id: number): Promise<Media> {
@@ -101,7 +151,14 @@ export class MediaService {
       throw new NotFoundException(`Média avec l'ID ${id} non trouvé`);
     }
 
-    return mediaDoc.data() as Media;
+    const media = mediaDoc.data() as Media;
+
+    // Assurer que les photos ont une miniature (utiliser l'URL principale si nécessaire)
+    if (media.type === MediaType.PHOTO && !media.thumbnailUrl && media.url) {
+      media.thumbnailUrl = media.url;
+    }
+
+    return media;
   }
 
   async update(id: number, updateMediaDto: UpdateMediaDto): Promise<Media> {
@@ -116,18 +173,28 @@ export class MediaService {
     // Récupérer les données existantes
     const existingData = mediaDoc.data() as Media;
 
+    // Pour les photos, si aucune miniature n'est fournie, utiliser l'URL principale
+    if (updateMediaDto.type === MediaType.PHOTO && !updateMediaDto.thumbnailUrl && updateMediaDto.url) {
+      updateMediaDto.thumbnailUrl = updateMediaDto.url;
+    }
+
     // Créer un objet de mise à jour sécurisé
     const safeUpdateData = {
       id: existingData.id,
-      title: updateMediaDto.title || existingData.title,
+      title: updateMediaDto.title || existingData.title || '',
       description: updateMediaDto.description || existingData.description || '',
       type: updateMediaDto.type || existingData.type,
-      url: updateMediaDto.url || existingData.url,
+      url: updateMediaDto.url || existingData.url || '',
       thumbnailUrl: updateMediaDto.thumbnailUrl || existingData.thumbnailUrl || '',
       uploadDate: existingData.uploadDate, // Ne pas mettre à jour la date d'origine
       featured: updateMediaDto.featured ?? existingData.featured,
       sortOrder: updateMediaDto.sortOrder ?? existingData.sortOrder
     };
+
+    // Assurer que les photos ont une miniature (utiliser l'URL principale si nécessaire)
+    if (safeUpdateData.type === MediaType.PHOTO && !safeUpdateData.thumbnailUrl && safeUpdateData.url) {
+      safeUpdateData.thumbnailUrl = safeUpdateData.url;
+    }
 
     await mediaRef.update(safeUpdateData);
 

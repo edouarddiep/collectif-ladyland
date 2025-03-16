@@ -72,7 +72,7 @@ $success-color: #28a745;
 
       img {
         width: 100%;
-        height: 100%;
+        height: 200%;
         object-fit: cover;
       }
     }
@@ -253,4 +253,12 @@ $success-color: #28a745;
       border-radius: 4px;
     }
   }
+}
+
+.optional {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: #666;
+  font-style: italic;
+  margin-left: 0.3rem;
 }

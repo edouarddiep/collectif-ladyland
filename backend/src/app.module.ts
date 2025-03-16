@@ -25,7 +25,7 @@ import {FirebaseModule} from "./auth/firebase.module";
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => [{
-        rootPath: join(__dirname, '..', configService.get<string>('upload.dest')),
+        rootPath: join(__dirname, '..', configService.get<string>('UPLOAD_DEST')),
         serveRoot: '/uploads',
       }],
     }),

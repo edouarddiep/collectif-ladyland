@@ -17,9 +17,22 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'concerts', pathMatch: 'full' },
-      { path: 'concerts', component: ConcertManagementComponent },
-      { path: 'artists', component: ArtistManagementComponent },
-      { path: 'media', component: MediaManagementComponent }
+      // Utilisation de l'option runGuardsAndResolvers: 'always' pour forcer la réinitialisation des composants
+      {
+        path: 'concerts',
+        component: ConcertManagementComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'artists',
+        component: ArtistManagementComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'media',
+        component: MediaManagementComponent,
+        runGuardsAndResolvers: 'always'
+      }
     ]
   }
 ];

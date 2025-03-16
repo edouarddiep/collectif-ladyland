@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
+import {DashboardDataService} from '../dashboard/service/dashboard-data.service';
 
 interface Concert {
   id: number;
@@ -22,7 +24,7 @@ interface Concert {
   templateUrl: './concert-management.component.html',
   styleUrls: ['./concert-management.component.scss']
 })
-export class ConcertManagementComponent implements OnInit {
+export class ConcertManagementComponent implements OnInit, OnDestroy {
   concerts: Concert[] = [];
   concertForm!: FormGroup;
   selectedFile: File | null = null;
@@ -33,15 +35,34 @@ export class ConcertManagementComponent implements OnInit {
   isSubmitting = false;
   searchText = '';
   filteredConcerts: Concert[] = [];
+  formSubmitted = false;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private http: HttpClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dashboardDataService: DashboardDataService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadConcerts();
     this.initForm();
+
+    // Charger les données immédiatement
+    this.loadConcerts();
+
+    // S'abonner au service pour recharger les données quand nécessaire
+    this.dashboardDataService.reloadData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadConcerts();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initForm(concert?: Concert): void {
@@ -50,10 +71,12 @@ export class ConcertManagementComponent implements OnInit {
       date: [concert?.date ? new Date(concert.date).toISOString().substring(0, 10) : '', [Validators.required]],
       venue: [concert?.venue || '', [Validators.required]],
       city: [concert?.city || '', [Validators.required]],
-      description: [concert?.description || '', [Validators.required]],
+      description: [concert?.description || ''],
       ticketLink: [concert?.ticketLink || ''],
       isFeatured: [concert?.isFeatured || false]
     });
+
+    this.formSubmitted = false;
 
     if (concert?.imageUrl) {
       this.currentImageUrl = concert.imageUrl;
@@ -64,9 +87,16 @@ export class ConcertManagementComponent implements OnInit {
 
   loadConcerts(): void {
     this.http.get<Concert[]>('http://localhost:3000/api/concerts')
-      .subscribe(data => {
-        this.concerts = data;
-        this.filteredConcerts = [...this.concerts];
+      .subscribe({
+        next: data => {
+          this.concerts = data;
+          this.filterConcerts();
+          // Forcer la détection de changement après mise à jour des données
+          this.cdr.detectChanges();
+        },
+        error: error => {
+          console.error('Error loading concerts:', error);
+        }
       });
   }
 
@@ -87,6 +117,7 @@ export class ConcertManagementComponent implements OnInit {
   cancelForm(): void {
     this.showForm = false;
     this.selectedFile = null;
+    this.formSubmitted = false;
   }
 
   onFileSelected(event: any): void {
@@ -94,6 +125,8 @@ export class ConcertManagementComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.formSubmitted = true;
+
     if (this.concertForm.invalid) {
       this.markFormGroupTouched(this.concertForm);
       return;
@@ -102,7 +135,6 @@ export class ConcertManagementComponent implements OnInit {
     this.isSubmitting = true;
     const formData = this.concertForm.value;
 
-    // Si un fichier a été sélectionné, téléchargez-le d'abord
     if (this.selectedFile) {
       const fileFormData = new FormData();
       fileFormData.append('file', this.selectedFile);
@@ -110,7 +142,6 @@ export class ConcertManagementComponent implements OnInit {
       this.http.post<any>('http://localhost:3000/api/upload/image', fileFormData)
         .subscribe({
           next: (fileResponse) => {
-            // Ajoutez l'URL de l'image au formulaire
             formData.imageUrl = `http://localhost:3000${fileResponse.path}`;
             this.saveConcert(formData);
           },
@@ -120,7 +151,6 @@ export class ConcertManagementComponent implements OnInit {
           }
         });
     } else {
-      // Si pas de nouveau fichier et en mode édition, conservez l'image existante
       if (this.editMode && this.currentImageUrl) {
         formData.imageUrl = this.currentImageUrl;
       }
@@ -136,6 +166,8 @@ export class ConcertManagementComponent implements OnInit {
             this.isSubmitting = false;
             this.showForm = false;
             this.loadConcerts();
+            // Déclencher un rechargement global des données
+            this.dashboardDataService.triggerReload();
           },
           error: (error) => {
             console.error('Error updating concert:', error);
@@ -149,6 +181,8 @@ export class ConcertManagementComponent implements OnInit {
             this.isSubmitting = false;
             this.showForm = false;
             this.loadConcerts();
+            // Déclencher un rechargement global des données
+            this.dashboardDataService.triggerReload();
           },
           error: (error) => {
             console.error('Error creating concert:', error);
@@ -164,6 +198,8 @@ export class ConcertManagementComponent implements OnInit {
         .subscribe({
           next: () => {
             this.loadConcerts();
+            // Déclencher un rechargement global des données
+            this.dashboardDataService.triggerReload();
           },
           error: (error) => {
             console.error('Error deleting concert:', error);

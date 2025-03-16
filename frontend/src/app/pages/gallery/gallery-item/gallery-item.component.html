@@ -1,0 +1,22 @@
+<div
+  class="gallery-item"
+  [class.active]="isActive"
+  [attr.data-type]="media.type"
+  (click)="onItemClick()">
+  <div class="gallery-thumbnail" [class.photo]="media.type === MediaType.PHOTO">
+    <img
+      [src]="getPlaceholderImage()"
+      [attr.data-src]="getThumbnailUrl()"
+      [alt]="media.title || 'Media item'"
+      class="img-responsive lazy-load"
+      loading="lazy"
+      (load)="onImageLoad($event)">
+    <div class="media-overlay">
+      <span class="media-type-badge">{{ getMediaTypeLabel() }}</span>
+      <div class="media-info">
+        <h3 class="media-title">{{ media.title || 'Sans titre' }}</h3>
+        <p class="media-date">{{ media.uploadDate | date:'dd MMM yyyy' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

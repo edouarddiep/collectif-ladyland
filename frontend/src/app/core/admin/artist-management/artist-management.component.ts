@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
+import {DashboardDataService} from '../dashboard/service/dashboard-data.service';
 
 interface Artist {
   id: number;
@@ -24,7 +26,7 @@ interface Artist {
   templateUrl: './artist-management.component.html',
   styleUrls: ['./artist-management.component.scss']
 })
-export class ArtistManagementComponent implements OnInit {
+export class ArtistManagementComponent implements OnInit, OnDestroy {
   artists: Artist[] = [];
   artistForm!: FormGroup;
   socialLinksForm!: FormGroup;
@@ -34,15 +36,34 @@ export class ArtistManagementComponent implements OnInit {
   editingId: number | null = null;
   showForm = false;
   isSubmitting = false;
+  formSubmitted = false;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private http: HttpClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dashboardDataService: DashboardDataService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadArtists();
     this.initForm();
+
+    // Charger les données immédiatement
+    this.loadArtists();
+
+    // S'abonner au service pour recharger les données quand nécessaire
+    this.dashboardDataService.reloadData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadArtists();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initForm(artist?: Artist): void {
@@ -60,6 +81,8 @@ export class ArtistManagementComponent implements OnInit {
       socialLinks: this.socialLinksForm
     });
 
+    this.formSubmitted = false;
+
     if (artist?.photoUrl) {
       this.currentPhotoUrl = artist.photoUrl;
     } else {
@@ -69,8 +92,15 @@ export class ArtistManagementComponent implements OnInit {
 
   loadArtists(): void {
     this.http.get<Artist[]>('http://localhost:3000/api/artists')
-      .subscribe(data => {
-        this.artists = data;
+      .subscribe({
+        next: data => {
+          this.artists = data;
+          // Forcer la détection de changement après mise à jour des données
+          this.cdr.detectChanges();
+        },
+        error: error => {
+          console.error('Error loading artists:', error);
+        }
       });
   }
 
@@ -91,6 +121,7 @@ export class ArtistManagementComponent implements OnInit {
   cancelForm(): void {
     this.showForm = false;
     this.selectedFile = null;
+    this.formSubmitted = false;
   }
 
   onFileSelected(event: any): void {
@@ -98,6 +129,8 @@ export class ArtistManagementComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.formSubmitted = true;
+
     if (this.artistForm.invalid) {
       this.markFormGroupTouched(this.artistForm);
       return;
@@ -106,7 +139,6 @@ export class ArtistManagementComponent implements OnInit {
     this.isSubmitting = true;
     const formData = this.artistForm.value;
 
-    // Si un fichier a été sélectionné, téléchargez-le d'abord
     if (this.selectedFile) {
       const fileFormData = new FormData();
       fileFormData.append('file', this.selectedFile);
@@ -114,7 +146,6 @@ export class ArtistManagementComponent implements OnInit {
       this.http.post<any>('http://localhost:3000/api/upload/image', fileFormData)
         .subscribe({
           next: (fileResponse) => {
-            // Ajoutez l'URL de la photo au formulaire
             formData.photoUrl = `http://localhost:3000${fileResponse.path}`;
             this.saveArtist(formData);
           },
@@ -124,7 +155,6 @@ export class ArtistManagementComponent implements OnInit {
           }
         });
     } else {
-      // Si pas de nouveau fichier et en mode édition, conservez la photo existante
       if (this.editMode && this.currentPhotoUrl) {
         formData.photoUrl = this.currentPhotoUrl;
       }
@@ -140,6 +170,8 @@ export class ArtistManagementComponent implements OnInit {
             this.isSubmitting = false;
             this.showForm = false;
             this.loadArtists();
+            // Déclencher un rechargement global des données
+            this.dashboardDataService.triggerReload();
           },
           error: (error) => {
             console.error('Error updating artist:', error);
@@ -153,6 +185,8 @@ export class ArtistManagementComponent implements OnInit {
             this.isSubmitting = false;
             this.showForm = false;
             this.loadArtists();
+            // Déclencher un rechargement global des données
+            this.dashboardDataService.triggerReload();
           },
           error: (error) => {
             console.error('Error creating artist:', error);
@@ -168,6 +202,8 @@ export class ArtistManagementComponent implements OnInit {
         .subscribe({
           next: () => {
             this.loadArtists();
+            // Déclencher un rechargement global des données
+            this.dashboardDataService.triggerReload();
           },
           error: (error) => {
             console.error('Error deleting artist:', error);
@@ -176,7 +212,6 @@ export class ArtistManagementComponent implements OnInit {
     }
   }
 
-  // Helper method to mark all controls as touched
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();

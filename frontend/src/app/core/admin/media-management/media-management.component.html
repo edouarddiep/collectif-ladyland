@@ -78,11 +78,8 @@
     <form [formGroup]="mediaForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="form-group">
-          <label for="title">Titre <span class="required">*</span></label>
-          <input type="text" id="title" formControlName="title" [class.is-invalid]="mediaForm.get('title')?.invalid && mediaForm.get('title')?.touched">
-          <div class="error-message" *ngIf="mediaForm.get('title')?.invalid && mediaForm.get('title')?.touched">
-            Le titre est requis.
-          </div>
+          <label for="title">Titre <span class="optional">(facultatif)</span></label>
+          <input type="text" id="title" formControlName="title">
         </div>
 
         <div class="form-group">
@@ -96,18 +93,15 @@
       </div>
 
       <div class="form-group">
-        <label for="description">Description</label>
+        <label for="description">Description <span class="optional">(facultatif)</span></label>
         <textarea id="description" formControlName="description" rows="3"></textarea>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="url">URL <span class="required">*</span></label>
-          <input type="text" id="url" formControlName="url" [class.is-invalid]="mediaForm.get('url')?.invalid && mediaForm.get('url')?.touched"
+          <label for="url">URL <span class="optional">(facultatif)</span></label>
+          <input type="text" id="url" formControlName="url"
                  placeholder="Pour les vidéos YouTube ou audio SoundCloud, entrez l'URL d'intégration">
-          <div class="error-message" *ngIf="mediaForm.get('url')?.invalid && mediaForm.get('url')?.touched">
-            L'URL est requise.
-          </div>
         </div>
 
         <div class="form-group">
@@ -116,12 +110,70 @@
         </div>
       </div>
 
+      <!-- Zone de Drag & Drop pour les photos -->
       <div class="form-group" *ngIf="mediaForm.get('type')?.value === MediaType.PHOTO">
-        <label for="mainFile">Fichier Photo</label>
-        <input type="file" id="mainFile" (change)="onMainFileSelected($event)" accept="image/*">
-        <small>Si vous téléchargez une nouvelle image, elle remplacera l'URL ci-dessus</small>
+        <label>Fichiers Photo</label>
 
-        <div class="current-image" *ngIf="currentUrl">
+        <!-- Informations sur les limites -->
+        <div class="upload-limits">
+          <p><i class="fas fa-info-circle"></i> Maximum 20 fichiers, 50 Mo par fichier, 500 Mo au total</p>
+        </div>
+
+        <!-- Zone Drag & Drop -->
+        <div
+          class="drop-zone"
+          [class.drop-zone-active]="isDragging"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          (click)="fileInput.click()"
+        >
+          <input
+            type="file"
+            #fileInput
+            style="display: none"
+            (change)="onFilesSelected($event)"
+            accept="image/*"
+            multiple
+          >
+          <div class="drop-message">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Glissez-déposez vos images ici ou cliquez pour parcourir</p>
+            <small>Formats acceptés: JPG, PNG, GIF, WEBP</small>
+          </div>
+        </div>
+
+        <!-- Message d'erreur d'upload -->
+        <div class="upload-error" *ngIf="uploadError">
+          <i class="fas fa-exclamation-triangle"></i> {{ uploadError }}
+        </div>
+
+        <!-- Aperçu des fichiers téléchargés -->
+        <div class="upload-preview" *ngIf="filesPreview.length > 0">
+          <h4>Fichiers sélectionnés ({{ filesPreview.length }}) - {{ formattedTotalSize }}</h4>
+
+          <div class="preview-grid">
+            <div class="preview-item" *ngFor="let preview of filesPreview; let i = index">
+              <div class="preview-image-container">
+                <img [src]="preview.src" [alt]="preview.name" class="preview-image">
+                <button type="button" class="preview-remove" (click)="removeFile(i)">
+                  <i class="fas fa-times"></i>
+                </button>
+                <span class="preview-size">{{ formatSize(preview.size) }}</span>
+              </div>
+              <p class="preview-name">{{ preview.name }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statut de téléchargement -->
+        <div class="upload-status" *ngIf="uploading">
+          <div class="spinner"></div>
+          <p>Téléchargement en cours... ({{ uploadProgress }}%)</p>
+        </div>
+
+        <!-- Image actuelle -->
+        <div class="current-image" *ngIf="currentUrl && !filesPreview.length">
           <p>Photo actuelle:</p>
           <img [src]="currentUrl" alt="Media">
         </div>
@@ -141,12 +193,16 @@
         <label>
           <input type="checkbox" formControlName="featured">
           Mettre ce média à la une
+          <span class="tooltip-container">
+            <i class="fas fa-info-circle info-icon"></i>
+            <span class="tooltip-text">Les médias mis à la une apparaîtront en priorité sur la page d'accueil et dans la galerie.</span>
+          </span>
         </label>
       </div>
 
       <div class="form-actions">
         <button type="button" class="cancel-btn" (click)="cancelForm()">Annuler</button>
-        <button type="submit" class="submit-btn" [disabled]="mediaForm.invalid || isSubmitting">
+        <button type="submit" class="submit-btn" [disabled]="isSubmitting || (filesPreview.length > 0 && uploadError)">
           <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
           {{ editMode ? 'Modifier' : 'Ajouter' }}
         </button>

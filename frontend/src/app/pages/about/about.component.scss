@@ -169,85 +169,147 @@ $light-text: #ffffff;
 
   .artists-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr); // 2 cards per row for desktop
     gap: 3rem;
     margin-top: 3rem;
   }
 
   .artist-card {
-    background: $light-text;
+    background: transparent;
+    width: 100%;
+    height: 500px; // Fixed height for consistent card appearance
+    perspective: 1000px; // 3D effect for flip
+  }
+
+  .artist-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+
+    &.flipped {
+      transform: rotateY(180deg);
+    }
+  }
+
+  .artist-card-front, .artist-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
+  }
+
+  .artist-card-front {
+    background-color: $light-text;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .artist-card-back {
+    background-color: $light-text;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    justify-content: center;
+  }
+
+  .artist-photo {
+    height: 350px;
+    overflow: hidden;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .artist-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .artist-name {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: $secondary-color;
+  }
+
+  .artist-role {
+    font-size: 1rem;
+    color: $primary-color;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .artist-bio {
+    margin-bottom: 1.5rem;
+    overflow-y: auto;
+    max-height: 300px;
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: $text-color;
+    }
+  }
+
+  .artist-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: $accent-color;
+      color: $secondary-color;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: $primary-color;
+        color: $light-text;
+      }
+    }
+  }
+
+  .back-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .back-btn {
+    margin-top: auto;
+    align-self: center;
+    background-color: $primary-color;
+    color: $light-text;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 
     &:hover {
-      transform: translateY(-10px);
-    }
-
-    .artist-photo {
-      height: 350px;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-
-        &:hover {
-          transform: scale(1.05);
-        }
-      }
-    }
-
-    .artist-info {
-      padding: 1.5rem;
-    }
-
-    .artist-name {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-      color: $secondary-color;
-    }
-
-    .artist-role {
-      font-size: 1rem;
-      color: $primary-color;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .artist-bio {
-      margin-bottom: 1.5rem;
-
-      p {
-        font-size: 0.95rem;
-        line-height: 1.6;
-        color: $text-color;
-      }
-    }
-
-    .artist-social {
-      display: flex;
-      gap: 1rem;
-
-      .social-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background-color: $accent-color;
-        color: $secondary-color;
-        transition: all 0.3s ease;
-
-        &:hover {
-          background-color: $primary-color;
-          color: $light-text;
-        }
-      }
+      background-color: color.adjust($primary-color, $lightness: -10%);
     }
   }
 }
@@ -375,6 +437,10 @@ $light-text: #ffffff;
       font-size: 1.1rem;
     }
   }
+
+  .artists-grid {
+    grid-template-columns: 1fr; // 1 card per row on smaller screens
+  }
 }
 
 @media (max-width: 480px) {
@@ -382,7 +448,11 @@ $light-text: #ffffff;
     font-size: 2rem;
   }
 
-  .artist-card .artist-photo {
+  .artist-card {
+    height: 450px;
+  }
+
+  .artist-photo {
     height: 280px;
   }
 }

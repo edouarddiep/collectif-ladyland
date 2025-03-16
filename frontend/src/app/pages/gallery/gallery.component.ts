@@ -83,4 +83,31 @@ export class GalleryComponent implements OnInit {
       url.startsWith('/')
     );
   }
+
+  /**
+   * Retourne l'URL de la miniature appropriée pour l'élément média
+   * Pour les photos, utilise l'URL principale si aucune miniature n'est définie
+   * Pour les autres types, utilise la miniature ou une image par défaut
+   */
+  getThumbnailUrl(media: Media): string {
+    // Si une miniature existe, l'utiliser quelle que soit le type
+    if (media.thumbnailUrl) {
+      return media.thumbnailUrl;
+    }
+
+    // Pour les photos, l'URL principale peut servir de miniature
+    if (media.type === MediaType.PHOTO) {
+      return media.url;
+    }
+
+    // Pour les autres types sans miniature, utiliser une image par défaut selon le type
+    switch (media.type) {
+      case MediaType.VIDEO:
+        return '/assets/images/gallery/video-placeholder.jpg';
+      case MediaType.AUDIO:
+        return '/assets/images/gallery/audio-placeholder.jpg';
+      default:
+        return '/assets/images/gallery/default-thumb.jpg';
+    }
+  }
 }

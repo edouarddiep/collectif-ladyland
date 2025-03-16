@@ -3,7 +3,7 @@
     <a routerLink="/" class="logo">Collectif Ladyland</a>
   </div>
 
-  <nav class="main-nav">
+  <nav class="main-nav" [class.open]="menuOpen$ | async">
     <ul class="nav-list">
       @for (item of navItems; track item.path) {
         <li class="nav-item">
@@ -12,6 +12,7 @@
             [routerLinkActiveOptions]="{exact: item.exact}"
             routerLinkActive="active"
             class="nav-link"
+            (click)="closeMenu()"
           >
             {{ item.label }}
           </a>
@@ -20,7 +21,7 @@
     </ul>
   </nav>
 
-  <button class="mobile-toggle">
+  <button class="mobile-toggle" (click)="toggleMenu()" [class.open]="menuOpen$ | async">
     <span class="sr-only">Menu</span>
     <span class="bar"></span>
     <span class="bar"></span>

@@ -1,129 +1,91 @@
-# Backend Collectif Ladyland
+# collectif-ladyland-backend
 
-API backend NestJS pour le site du Collectif Ladyland - groupe de musique basé à Paris.
+## À propos du projet
 
-## Technologies utilisées
+Ce projet a été généré avec [Angular CLI](https://github.com/angular/angular-cli) version .
 
-- **[NestJS](https://nestjs.com/)** - Framework Node.js progressif pour construire des applications backend efficaces et évolutives
-- **[Firebase](https://firebase.google.com/)** - Base de données Firestore et authentification
-- **[TypeScript](https://www.typescriptlang.org/)** - Langage typé au-dessus de JavaScript
-- **[Multer](https://github.com/expressjs/multer)** - Middleware pour la gestion des fichiers uploadés
-- **[JWT](https://jwt.io/)** - JSON Web Tokens pour l'authentification
+## Structure du projet
 
-## Prérequis
+```
+src/
+├── app/               # Composants principaux et configuration
+├── assets/            # Images, polices et autres ressources statiques
+├── environments/      # Configurations d'environnement
+└── styles/            # Styles globaux
+```
 
-- Node.js (v18.x ou supérieur)
-- npm ou yarn
-- Un projet Firebase (avec Firestore et Authentication activés)
+## Statistiques du projet
+
+- **Composants**:        0
+- **Services**:        7
+- **Modèles/Interfaces**:        0
+- **Tests**:        0
+- **Pages**:        0
+
+## Routes de l'application
+
+Voici les principales routes de l'application :
+
+| Route | Description | Composant |
+| --- | --- | --- |
+Fichier de routes non trouvé.
+
+## Composants
+
+| Nom | Type | Chemin |
+| --- | --- | --- |
+
+## Services
+
+| Nom | Chemin |
+| --- | --- |
+| UappService | src/app.service.ts |
+| UartistsService | src/artists/artists.service.ts |
+| UauthService | src/auth/auth.service.ts |
+| UconcertsService | src/concerts/concerts.service.ts |
+| UcontactService | src/contact/contact.service.ts |
+| UmediaService | src/media/media.service.ts |
+| UuploadService | src/upload/upload.service.ts |
+
+## Modèles
+
+| Nom | Type | Chemin |
+| --- | --- | --- |
 
 ## Installation
 
-1. Cloner le dépôt :
-   ```bash
-   git clone <repository-url>
-   cd backend
-   ```
-
-2. Installer les dépendances :
-   ```bash
-   npm install
-   ```
-
-3. Configurer les variables d'environnement :
-    - Copiez le fichier `.env.example` vers `.env`
-    - Remplissez les informations Firebase et autres paramètres
-   ```bash
-   cp .env.example .env
-   ```
-
-## Configuration Firebase
-
-1. Créez un projet Firebase sur [Firebase Console](https://console.firebase.google.com/)
-2. Activez Firestore et Authentication
-3. Dans les paramètres du projet > Comptes de service > Générer une nouvelle clé privée
-4. Utilisez les informations de ce fichier JSON pour remplir les variables d'environnement :
-    - `FIREBASE_PROJECT_ID`
-    - `FIREBASE_PRIVATE_KEY`
-    - `FIREBASE_CLIENT_EMAIL`
-    - `FIREBASE_DATABASE_URL`
-
-## Initialisation de la base de données
-
-Pour initialiser la base de données avec des données de test :
-
 ```bash
-npm run firebase:init
+npm install
 ```
 
-Cette commande va créer :
-- Un utilisateur administrateur (email: admin@collectifladyland.com, password: admin123)
-- Des artistes
-- Des concerts à venir et passés
-- Des médias (photos, vidéos, audio)
+## Développement
 
-## Démarrage du serveur
+Pour démarrer le serveur de développement :
 
 ```bash
-# Développement
-npm run start:dev
-
-# Production
-npm run start:prod
+ng serve
 ```
 
-Le serveur sera accessible sur http://localhost:3000/api/
+Naviguez vers `http://localhost:4200/`. L'application se rechargera automatiquement si vous modifiez l'un des fichiers source.
 
-## Endpoints API
+## Build
 
-### Authentification
-- `POST /api/auth/login` - Connexion administrateur
-- `GET /api/auth/profile` - Profil utilisateur connecté (protégé)
+Pour construire le projet :
 
-### Artistes
-- `GET /api/artists` - Liste des artistes
-- `GET /api/artists/:id` - Détails d'un artiste
-- `POST /api/artists` - Créer un artiste (protégé)
-- `PUT /api/artists/:id` - Modifier un artiste (protégé)
-- `DELETE /api/artists/:id` - Supprimer un artiste (protégé)
+```bash
+ng build
+```
 
-### Concerts
-- `GET /api/concerts` - Liste des concerts
-- `GET /api/concerts/upcoming` - Concerts à venir
-- `GET /api/concerts/past` - Concerts passés
-- `GET /api/concerts/:id` - Détails d'un concert
-- `POST /api/concerts` - Créer un concert (protégé)
-- `PUT /api/concerts/:id` - Modifier un concert (protégé)
-- `DELETE /api/concerts/:id` - Supprimer un concert (protégé)
+Les artefacts de construction seront stockés dans le répertoire `dist/`.
 
-### Média
-- `GET /api/media` - Liste des médias
-- `GET /api/media/featured` - Médias à la une
-- `GET /api/media/type?type=photo` - Médias par type (photo, video, audio)
-- `GET /api/media/:id` - Détails d'un média
-- `POST /api/media` - Créer un média (protégé)
-- `PUT /api/media/:id` - Modifier un média (protégé)
-- `DELETE /api/media/:id` - Supprimer un média (protégé)
+## Tests
 
-### Contact
-- `POST /api/contact` - Envoyer un message
-- `GET /api/contact` - Liste des messages (protégé)
-- `GET /api/contact/:id` - Détails d'un message (protégé)
-- `PATCH /api/contact/:id/read` - Marquer un message comme lu (protégé)
-- `DELETE /api/contact/:id` - Supprimer un message (protégé)
+Pour exécuter les tests unitaires :
 
-### Upload
-- `POST /api/upload/image` - Télécharger une image (protégé)
-- `POST /api/upload/video` - Télécharger une vidéo (protégé)
-- `POST /api/upload/audio` - Télécharger un fichier audio (protégé)
+```bash
+ng test
+```
 
-## Intégration avec le frontend Angular
+## Aide supplémentaire
 
-Ce backend est conçu pour fonctionner avec le frontend Angular existant. Assurez-vous que le frontend est configuré pour pointer vers l'URL de base de l'API (http://localhost:3000/api/).
-
-## CORS
-
-Le CORS est configuré pour autoriser les requêtes de n'importe quelle origine en mode développement. Pour la production, il est recommandé de restreindre les origines autorisées en modifiant le fichier `src/main.ts`.
-
-## Licence
-
-MIT
+Pour obtenir plus d'aide sur Angular CLI, utilisez `ng help` ou consultez [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli).

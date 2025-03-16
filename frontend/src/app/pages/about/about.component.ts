@@ -14,10 +14,15 @@ import { ApiService } from '../../services/api/api.service';
 })
 export class AboutComponent implements OnInit {
   artists$!: Observable<Artist[]>;
+  flippedArtistId: number | null = null;
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.artists$ = this.apiService.getArtists();
+  }
+
+  flipCard(artistId: number | null): void {
+    this.flippedArtistId = artistId;
   }
 }

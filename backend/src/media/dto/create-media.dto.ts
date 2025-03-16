@@ -2,9 +2,9 @@ import { IsNotEmpty, IsString, IsOptional, IsUrl, IsEnum, IsBoolean, IsNumber } 
 import { MediaType } from '../schemas/media.schema';
 
 export class CreateMediaDto {
-  @IsNotEmpty({ message: 'Le titre est requis' })
+  @IsOptional()
   @IsString({ message: 'Le titre doit être une chaîne de caractères' })
-  title: string;
+  title?: string;
 
   @IsOptional()
   @IsString({ message: 'La description doit être une chaîne de caractères' })
@@ -14,9 +14,9 @@ export class CreateMediaDto {
   @IsEnum(MediaType, { message: 'Type de média invalide' })
   type: MediaType;
 
-  @IsNotEmpty({ message: 'L\'URL est requise' })
+  @IsOptional()
   @IsString({ message: 'L\'URL doit être une chaîne de caractères' })
-  url: string;
+  url?: string;
 
   @IsOptional()
   @IsString({ message: 'L\'URL de la miniature doit être une chaîne de caractères' })

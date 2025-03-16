@@ -370,6 +370,255 @@ $success-color: #28a745;
   }
 }
 
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.5rem;
+
+  .info-icon {
+    color: #4285F4;
+    cursor: pointer;
+  }
+
+  .tooltip-text {
+    visibility: hidden;
+    width: 300px;
+    background-color: $secondary-color;
+    color: $light-text;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0.8rem;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.85rem;
+    font-weight: normal;
+    pointer-events: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: $secondary-color transparent transparent transparent;
+    }
+  }
+
+  &:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/* Ajoutez ces styles au fichier media-management.component.scss */
+
+.optional {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: #666;
+  font-style: italic;
+  margin-left: 0.3rem;
+}
+
+/* Informations sur les limites d'upload */
+.upload-limits {
+  margin-bottom: 0.8rem;
+
+  p {
+    font-size: 0.9rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: #4285F4;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+/* Message d'erreur d'upload */
+.upload-error {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background-color: rgba($error-color, 0.1);
+  border-left: 4px solid $error-color;
+  color: $error-color;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+
+  i {
+    margin-right: 0.5rem;
+  }
+}
+
+/* Styles pour la zone de Drag & Drop */
+.drop-zone {
+  width: 100%;
+  height: 150px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+    border-color: $primary-color;
+  }
+
+  &.drop-zone-active {
+    background-color: rgba($primary-color, 0.1);
+    border-color: $primary-color;
+  }
+
+  .drop-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+
+    i {
+      font-size: 2rem;
+      color: #999;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      color: #666;
+    }
+
+    small {
+      color: #999;
+    }
+  }
+}
+
+/* Styles pour l'aperçu des fichiers */
+.upload-preview {
+  margin-top: 1.5rem;
+
+  h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: $secondary-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+
+  .preview-item {
+    position: relative;
+
+    .preview-image-container {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $error-color;
+      }
+
+      i {
+        font-size: 0.8rem;
+      }
+    }
+
+    .preview-size {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    .preview-name {
+      margin: 0.5rem 0 0;
+      font-size: 0.85rem;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+  }
+}
+
+/* Statut de téléchargement */
+.upload-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: rgba($primary-color, 0.1);
+  border-radius: 4px;
+
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba($primary-color, 0.3);
+    border-radius: 50%;
+    border-top-color: $primary-color;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 1rem;
+  }
+
+  p {
+    margin: 0;
+    color: $primary-color;
+    font-weight: 500;
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .management-header {

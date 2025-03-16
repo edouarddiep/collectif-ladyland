@@ -11,7 +11,13 @@ export interface Media {
   type: MediaType;
   url: string;
   thumbnailUrl?: string;
-  uploadDate: Date;
+  uploadDate: Date | string;
   featured?: boolean;
   sortOrder?: number;
+
+  // Nouvelles propriétés pour l'optimisation
+  albumId?: string;
+  width?: number;
+  height?: number;
+  isLoaded?: boolean;
 }

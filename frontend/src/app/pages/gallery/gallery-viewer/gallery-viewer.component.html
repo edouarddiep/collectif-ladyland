@@ -1,0 +1,99 @@
+<div
+  class="viewer-container"
+  [class.fullscreen]="options.fullscreen"
+  (click)="onClose()"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)">
+
+  <div class="viewer-content" (click)="$event.stopPropagation()">
+    @if (getActiveItem(); as item) {
+      <!-- Photo Content -->
+      @if (item.type === MediaType.PHOTO) {
+        <div class="photo-content">
+          <img [src]="item.url" [alt]="item.title" class="viewer-img">
+        </div>
+      }
+
+      <!-- Video Content -->
+      @if (item.type === MediaType.VIDEO && isSafeUrl(item.url)) {
+        <div class="video-content">
+          <iframe
+            [src]="item.url"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            (click)="onMediaControlsClick($event)">
+          </iframe>
+        </div>
+      }
+
+      <!-- Audio Content -->
+      @if (item.type === MediaType.AUDIO && isSafeUrl(item.url)) {
+        <div class="audio-content">
+          <div class="audio-wrapper">
+            <img [src]="item.thumbnailUrl || '/assets/images/gallery/audio-placeholder.jpg'" [alt]="item.title" class="audio-thumbnail">
+            <iframe
+              [src]="item.url"
+              frameborder="0"
+              allow="autoplay"
+              (click)="onMediaControlsClick($event)">
+            </iframe>
+          </div>
+        </div>
+      }
+
+      <!-- Item Info -->
+      <div class="item-info">
+        <h2 class="item-title">{{ item.title }}</h2>
+        <p class="item-description" *ngIf="item.description">{{ item.description }}</p>
+        <p class="item-date">{{ item.uploadDate | date:'longDate' }}</p>
+      </div>
+    }
+  </div>
+
+  <!-- Navigation Controls -->
+  <div class="viewer-controls">
+    <button class="nav-btn prev-btn" (click)="onNavigate('prev'); $event.stopPropagation()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+
+    <button class="nav-btn next-btn" (click)="onNavigate('next'); $event.stopPropagation()">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="viewer-toolbar">
+    <div class="toolbar-left">
+      <span class="counter">{{ activeIndex + 1 }} / {{ items.length }}</span>
+    </div>
+
+    <div class="toolbar-right">
+      <button class="toolbar-btn" [class.active]="options.slideshow" (click)="onToggleSlideshow(); $event.stopPropagation()">
+        <i class="fas fa-play"></i>
+      </button>
+
+      <button class="toolbar-btn" [class.active]="options.fullscreen" (click)="onToggleFullscreen(); $event.stopPropagation()">
+        <i class="fas" [ngClass]="options.fullscreen ? 'fa-compress' : 'fa-expand'"></i>
+      </button>
+
+      <button class="toolbar-btn close-btn" (click)="onClose(); $event.stopPropagation()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Thumbnails Navigation -->
+  <div class="thumbnails-nav">
+    <div class="thumbnails-container">
+      @for (media of items; track media.id) {
+        <div
+          class="thumbnail-item"
+          [class.active]="activeIndex === items.indexOf(media)"
+          (click)="activeIndex = items.indexOf(media); $event.stopPropagation()">
+          <img [src]="media.thumbnailUrl || media.url" [alt]="media.title" class="thumbnail-img">
+        </div>
+      }
+    </div>
+  </div>
+</div>

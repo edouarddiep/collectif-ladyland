@@ -1,0 +1,70 @@
+<div class="contact-management">
+  <div class="management-header">
+    <h2>Gestion des messages</h2>
+  </div>
+
+  <!-- Liste des messages -->
+  <div class="messages-list">
+    <div class="no-items" *ngIf="messages.length === 0">
+      <p>Aucun message trouvé.</p>
+    </div>
+
+    <table *ngIf="messages.length > 0">
+      <thead>
+      <tr>
+        <th>Expéditeur</th>
+        <th>Email</th>
+        <th>Sujet</th>
+        <th>Date</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let message of messages" [class.unread]="!message.read">
+        <td>{{ message.name }}</td>
+        <td>{{ message.email }}</td>
+        <td>{{ message.subject }}</td>
+        <td>{{ message.date | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+            <span class="status-badge" [class.read]="message.read" [class.unread]="!message.read">
+              {{ message.read ? 'Lu' : 'Non lu' }}
+            </span>
+        </td>
+        <td class="actions-cell">
+          <button class="action-btn view-btn" (click)="viewMessage(message)" title="Voir">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteMessage(message.id)" title="Supprimer">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal de détail du message -->
+  <div class="message-modal" *ngIf="selectedMessage">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ selectedMessage.subject }}</h3>
+        <button class="close-btn" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="message-info">
+          <p><strong>De:</strong> {{ selectedMessage.name }} ({{ selectedMessage.email }})</p>
+          <p><strong>Date:</strong> {{ selectedMessage.date | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <div class="message-content">
+          <p>{{ selectedMessage.message }}</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="markAsRead(selectedMessage.id)"
+                *ngIf="!selectedMessage.read">Marquer comme lu</button>
+        <button class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

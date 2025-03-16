@@ -8,11 +8,11 @@
     <div class="footer-section">
       <h3 class="footer-title">Liens rapides</h3>
       <ul class="footer-links">
-        <li><a routerLink="/">Accueil</a></li>
-        <li><a routerLink="/about">À propos de nous</a></li>
-        <li><a routerLink="/concerts">Concerts</a></li>
-        <li><a routerLink="/gallery">Galerie</a></li>
-        <li><a routerLink="/contact">Contact</a></li>
+        <li><a (click)="navigateTo('/')" class="footer-link">Accueil</a></li>
+        <li><a (click)="navigateTo('/about')" class="footer-link">À propos de nous</a></li>
+        <li><a (click)="navigateTo('/concerts')" class="footer-link">Concerts</a></li>
+        <li><a (click)="navigateTo('/gallery')" class="footer-link">Galerie</a></li>
+        <li><a (click)="navigateTo('/contact')" class="footer-link">Contact</a></li>
       </ul>
     </div>
 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
+import {SnackbarService} from '../../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -54,10 +56,12 @@ export class LoginComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.router.navigate([this.returnUrl]);
+        this.snackbarService.show('Connexion réussie', 'success');
       },
       error: error => {
         this.error = error.error?.message || 'Identifiants invalides';
         this.loading = false;
+        this.snackbarService.show('Identifiants invalides', 'error');
       }
     });
   }

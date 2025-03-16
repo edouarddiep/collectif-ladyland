@@ -12,13 +12,16 @@
     <div class="about-content">
       <div class="about-text">
         <h2>Notre histoire</h2>
-        <p>Le Collectif Ladyland est né en 2019 de la rencontre de quatre musiciens partageant une vision commune : créer une musique authentique qui transcende les frontières des genres établis. Ce qui a commencé comme des sessions d'improvisation dans un petit studio parisien est rapidement devenu un projet artistique à part entière.</p>
+        <p>
+          Bienvenue dans le monde électrisant du groupe « Collectif Ladyland » !
 
-        <p>Notre nom s'inspire du célèbre album de Jimi Hendrix "Electric Ladyland", tout en y ajoutant la notion de collectif qui reflète notre approche collaborative de la création musicale. Chaque membre apporte ses influences et son univers personnel, créant ainsi une identité sonore riche et diversifiée.</p>
+          Formé par quatre musiciens talentueux, ce groupe revisite la musique du légendaire Jimi Hendrix avec une touche électro-rock unique.
 
-        <p>Au fil des années, nous avons développé un répertoire original qui puise dans le jazz, la soul, les musiques électroniques et world. Notre ADN musical se caractérise par des mélodies captivantes, des harmonies sophistiquées et des grooves puissants qui invitent à la danse autant qu'à l'écoute attentive.</p>
+          Leur créativité collective fusionne habilement les éléments intemporels du rock avec des influences contemporaines pour donner un son puissant, des riffs de guitare brûlants et des grooves hypnotiques.
+
+          Leur énergie sur scène est contagieuse, accrochez-vous bien !
+        </p>
       </div>
-
       <div class="about-image">
         <img src="/assets/images/about/collectif-story.jpg" alt="Collectif Ladyland en studio" class="img-responsive">
       </div>
@@ -53,44 +56,51 @@
       <div class="artists-grid">
         @for (artist of artists; track artist.id) {
           <div class="artist-card" [id]="'artist-' + artist.id">
-            <div class="artist-photo">
-              <img [src]="artist.photoUrl" [alt]="artist.name" class="img-responsive">
-            </div>
-
-            <div class="artist-info">
-              <h3 class="artist-name">{{ artist.name }}</h3>
-              <p class="artist-role">{{ artist.role }}</p>
-              <div class="artist-bio">
-                <p>{{ artist.bio }}</p>
+            <div class="artist-card-inner" [class.flipped]="flippedArtistId === artist.id">
+              <!-- Front of the card -->
+              <div class="artist-card-front">
+                <div class="artist-photo" (click)="flipCard(artist.id)">
+                  <img [src]="artist.photoUrl" [alt]="artist.name" class="img-responsive">
+                </div>
+                <div class="artist-info">
+                  <h3 class="artist-name">{{ artist.name }}</h3>
+                  <p class="artist-role">{{ artist.role }}</p>
+                  <div class="artist-social">
+                    @if (artist.socialLinks?.instagram) {
+                      <a [href]="artist.socialLinks.instagram" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                    }
+                    @if (artist.socialLinks?.facebook) {
+                      <a [href]="artist.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                      </a>
+                    }
+                    @if (artist.socialLinks?.twitter) {
+                      <a [href]="artist.socialLinks.twitter" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                      </a>
+                    }
+                    @if (artist.socialLinks?.soundcloud) {
+                      <a [href]="artist.socialLinks.soundcloud" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="SoundCloud">
+                        <i class="fab fa-soundcloud"></i>
+                      </a>
+                    }
+                  </div>
+                </div>
               </div>
 
-              @if (artist.socialLinks) {
-                <div class="artist-social">
-                  @if (artist.socialLinks.instagram) {
-                    <a [href]="artist.socialLinks.instagram" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
-                      <i class="fab fa-instagram"></i>
-                    </a>
-                  }
-
-                  @if (artist.socialLinks.facebook) {
-                    <a [href]="artist.socialLinks.facebook" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook">
-                      <i class="fab fa-facebook-f"></i>
-                    </a>
-                  }
-
-                  @if (artist.socialLinks.twitter) {
-                    <a [href]="artist.socialLinks.twitter" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter">
-                      <i class="fab fa-twitter"></i>
-                    </a>
-                  }
-
-                  @if (artist.socialLinks.soundcloud) {
-                    <a [href]="artist.socialLinks.soundcloud" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="SoundCloud">
-                      <i class="fab fa-soundcloud"></i>
-                    </a>
-                  }
+              <!-- Back of the card -->
+              <div class="artist-card-back">
+                <div class="back-content">
+                  <h3 class="artist-name">{{ artist.name }}</h3>
+                  <p class="artist-role">{{ artist.role }}</p>
+                  <div class="artist-bio">
+                    <p>{{ artist.bio }}</p>
+                  </div>
+                  <button class="back-btn" (click)="flipCard(null)">Retour</button>
                 </div>
-              }
+              </div>
             </div>
           </div>
         }
